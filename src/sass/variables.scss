@@ -1,0 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+$font-family: 'Poppins', sans-serif;
+$body-font-family: 'Poppins', sans-serif;
+$rounded: (
+  0: 0,
+  'sm': $border-radius-root / 2,
+  null: $border-radius-root,
+  'lg': $border-radius-root * 2,
+  'xl': $border-radius-root * 8,
+  'pill': 9999px,
+  'circle': 50%
+);

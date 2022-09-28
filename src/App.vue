@@ -1,60 +1,44 @@
+
+<!--
+                    IMPORTANTE ANTES DE PUSHEAR, 
+armar un archivo en ./views con el codigo de la pag que estan armando
+-->
+
 <template>
   <v-app>
-    <v-app-bar
-      app
-      color="primary"
-      dark
-    >
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
-
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
-      </div>
-
-      <v-spacer></v-spacer>
-
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
-    </v-app-bar>
-
-    <v-main>
-      <HelloWorld/>
+    <!--Ahora armo el nav bar post login-->
+    <LoginNavBar/>
+    <v-main class="content">
+      <v-container fluid class="pb-10">
+        <!--Aca va el content/body-->
+      </v-container>
     </v-main>
+    <FooterBar/>
   </v-app>
 </template>
 
+<!-- Ojo con el important-->
+<style>
+  .content {
+    background: url(./assets/fondo.png);
+    background-size: cover;
+  }
+</style>
+
 <script>
-import HelloWorld from './components/HelloWorld';
+import LoginNavBar from './components/LoginNavBar.vue';
+import FooterBar from './components/FooterBar.vue';
 
 export default {
   name: 'App',
+  data: () => ({
+  
+  }),
 
   components: {
-    HelloWorld,
-  },
+    LoginNavBar,
+    FooterBar
+}
 
-  data: () => ({
-    //
-  }),
 };
 </script>
