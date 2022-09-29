@@ -14,7 +14,7 @@
           <v-card class="white rounded-xl pa-5">
             <v-row>
               <v-col cols="4" class="text-center">
-                <h5 class="onwhite mt-6">Workout Name</h5>
+                <h5 class="onWhite mt-6">Workout Name</h5>
               </v-col>
               <v-col cols="6">
                 <v-text-field class="mt-4" solo clearable  rounded single-line dark background-color="#55B8FF"/>
@@ -22,7 +22,7 @@
             </v-row>
             <v-row>
               <v-col cols="4" class="text-center">
-                <h5 class="onwhite mt-2">Category</h5>
+                <h5 class="onWhite mt-2">Category</h5>
               </v-col>
               <v-col cols="6">
                 <v-select v-model="select1" :items="items1" rounded single-line clearable solo background-color="#55B8FF" dark/>
@@ -30,7 +30,7 @@
             </v-row>
             <v-row>
               <v-col cols="4" class="text-center">
-                <h5 class="onwhite mt-2">Intensity</h5>
+                <h5 class="onWhite mt-2">Intensity</h5>
               </v-col>
               <v-col cols="6">
                 <v-select :items="items2" rounded single-line clearable solo background-color="#55B8FF" dark/>
@@ -38,7 +38,7 @@
             </v-row>
             <v-row>
               <v-col cols="4" class="text-center">
-                <h5 class="onwhite mt-2">Cover Image</h5>
+                <h5 class="onWhite mt-2">Cover Image</h5>
               </v-col>
               <v-col cols="6">
                 <v-file-input class="mb-4" label='Attach Image' clearable solo single-line dark background-color="#55B8FF"  rounded/>
@@ -95,7 +95,7 @@ export default {
     background: url(../assets/fondo.png);
     background-size: cover;
   }
-  .onwhite {
+  .onWhite {
     color: #5A6175;
     font-size: x-large;
     margin-left: 7%;
