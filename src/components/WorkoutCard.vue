@@ -64,7 +64,7 @@ export default {
   props: {
     size: Number,
     workoutName: String,
-    wrokoutImg: String,
+    workoutImg: String,
     chips: Array,
     trainerImg: String,
     trainerName: String,
