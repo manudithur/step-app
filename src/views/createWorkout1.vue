@@ -18,14 +18,13 @@
               </v-col>
               <v-col cols="6">
                 <v-text-field
-                  class="mt-4"
+                  class="mt-4 inputField"
                   solo
-                  clearable
                   rounded
                   single-line
                   dark
                   background-color="#55B8FF"
-                />
+                >Workout Name</v-text-field>
               </v-col>
             </v-row>
             <v-row>
@@ -34,11 +33,11 @@
               </v-col>
               <v-col cols="6">
                 <v-select
+                  class="justify-center"
                   v-model="select1"
                   :items="items1"
                   rounded
                   single-line
-                  clearable
                   solo
                   background-color="#55B8FF"
                   dark
@@ -54,7 +53,6 @@
                   :items="items2"
                   rounded
                   single-line
-                  clearable
                   solo
                   background-color="#55B8FF"
                   dark
@@ -66,16 +64,12 @@
                 <h5 class="onWhite mt-2">Cover Image</h5>
               </v-col>
               <v-col cols="6">
-                <v-file-input
-                  class="mb-4"
-                  label="Attach Image"
-                  clearable
-                  solo
-                  single-line
-                  dark
-                  background-color="#55B8FF"
-                  rounded
-                />
+                  <v-btn
+                    class="mb-4 py-6 white--text"
+                    block
+                    color="#55B8FF"
+                    rounded
+                  ><input type="file" hidden> Attach Image</v-btn>
               </v-col>
             </v-row>
           </v-card>
@@ -84,13 +78,42 @@
       <v-row class="mb-16">
         <v-col cols="9" />
         <v-col cols="1">
-          <v-btn rounded elevation="5" class="mb-16" width="100%">Next</v-btn>
+          <v-btn rounded elevation="5" class="pa-7 mb-16 next" width="100%">Next</v-btn>
         </v-col>
       </v-row>
     </v-main>
     <FooterBar />
   </v-app>
 </template>
+
+<style scoped>
+
+  .inputField >>> input{
+    text-align: center;
+  }
+
+  .v-select__selection {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .content {
+    background: url(../assets/fondo.png);
+    background-size: cover;
+  }
+  .onWhite {
+    color: #5a6175;
+    font-size: x-large;
+    margin-left: 7%;
+    margin-right: 7%;
+  }
+
+  .next {
+    font-weight: bold;
+    font-size: 20px;
+  }
+
+ </style>
 
 <script>
 import LoginNavBar from "@/components/LoginNavBar";
@@ -110,15 +133,3 @@ export default {
 };
 </script>
 
-<style scoped>
-.content {
-  background: url(../assets/fondo.png);
-  background-size: cover;
-}
-.onWhite {
-  color: #5a6175;
-  font-size: x-large;
-  margin-left: 7%;
-  margin-right: 7%;
-}
-</style>

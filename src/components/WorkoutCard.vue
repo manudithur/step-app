@@ -3,10 +3,10 @@
 <template>
   <v-card class="secondary rounded-xl white--text pb-5">
     <v-img
-      aspect-ratio="{{size}}"
+      :aspect-ratio=size
       class="text-left"
       width="600"
-      :src="require('{{workoutImg}}')"
+      :src=require(workoutImg)
     >
       <v-container class="pa-5">
         <!--For con los chips-->
@@ -23,7 +23,7 @@
 
     <v-row class="justify-center text-center pa-5">
       <v-col cols="15">
-        <v-avatar size="80"><v-img :src="require('{{trainerImg}}')"></v-img></v-avatar>
+        <v-avatar size="80"><v-img :src=require(trainerImg)></v-img></v-avatar>
       </v-col>
       <v-col cols="50">
         <h2>{{trainerName}}</h2>
@@ -40,9 +40,9 @@
           length="5"
           dense
           size="20"
-          value="4.5"
+          :value=review
         ></v-rating>
-        <p class="black--text">123 reviews</p>
+        <p class="black--text">{{reviewsCount}} reviews</p>
       </v-col>
     </v-row>
   </v-card>
@@ -62,15 +62,14 @@
 export default {
   name: "WorkoutCard",
   props: {
-    size: Number,
+    size: String,
     workoutName: String,
     workoutImg: String,
-    chips: Array,
     trainerImg: String,
     trainerName: String,
     trainerDescription: String,
-    reviewsCount: Number,
-    review: Number,
+    reviewsCount: String,
+    review: String,
   },
 };
 </script>
