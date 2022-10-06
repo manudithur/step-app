@@ -3,7 +3,7 @@
       <LoginNavBar/>
       <v-main class="content">
         <v-container fluid class="pb-10">
-          <v-row class="justify-center pa-0 pt-10">
+          <v-row class="justify-center pt-10">
             <v-col cols="4" class="pt-15" >
               <v-container class="white--text pt-15">
                 <h1 class="banner-text">Let us enhance your workout experience.</h1>
@@ -14,10 +14,10 @@
               </v-container>
             </v-col>
             <v-col cols="5">
-              <v-img src="../assets/trainers.png" max-width="1000px" min-width="500px"></v-img>
+              <v-img src="../assets/trainers.png"  class="mb-0 pb-0" max-width="900px" min-width="800px"></v-img>
             </v-col>
           </v-row>
-          <v-row class="justify-center">
+          <v-row class="justify-center ma-0">
             <v-card class="white rounded-xl pa-5">
               <v-col cols="200">
                   <v-row class="justify-center text-center pa-5">
@@ -46,7 +46,7 @@
                           </v-col>
                           <v-col cols="50">
                             <h2>Lory Stenson</h2>
-                            <p>15+ years of experience</p>
+                            <p>5+ years of experience</p>
                           </v-col>
                           <v-col cols="35">
                             <v-rating
