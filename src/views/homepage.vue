@@ -22,7 +22,7 @@
                 </v-progress-linear>
               </v-row>
               <v-row class="pt-4">
-                <v-btn x-large elevation="4" class="button rounded-lg white">
+                <v-btn x-large elevation="4" class="buttonHome rounded-lg white">
                   Continue Now!
                 </v-btn>
               </v-row>
@@ -176,9 +176,9 @@
 </template>
 
 <!-- Ojo con el important-->
-<style>
+<style scoped>
 
-.button{
+.buttonHome{
   color:#1B56ED !important;
   font-weight:bold;
 }

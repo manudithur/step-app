@@ -35,7 +35,7 @@
 </template>
 
 <!-- Ojo con el important-->
-<style>
+<style scoped>
 .input {
   padding-top: 30px;
 }
