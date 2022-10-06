@@ -6,14 +6,9 @@ armar un archivo en ./views con el codigo de la pag que estan armando
 
 <template>
   <v-app>
-    <!--Ahora armo el nav bar post login-->
-    <LoginNavBar/>
-    <v-main class="content">
-      <v-container fluid class="pb-10">
-        <!--Aca va el content/body-->
-      </v-container>
-    </v-main>
-    <FooterBar/>
+    <v-content>
+      <router-view></router-view>
+    </v-content>
   </v-app>
 </template>
 
