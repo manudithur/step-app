@@ -10,13 +10,14 @@
             <h3 class="mt-6">Step 3: Review Workout</h3>
           </v-container>
           <v-card class = "white rounded-xl pa-5">
-            <v-container v-for="cycle in cicles" :key="cycle.cycleName">
+            <v-container v-for="(cycle, cycleIndex) in cycles" :key="cycle.cycleName">
               <v-row>
                 <h2 class="onWhite ma-4">{{cycle.cycleName}}</h2>
               </v-row>
-              <WorkoutReview v-for="items in cycle.exercises" :key="items" :workout-name="items.name" :repsOrTime="items.repsOrTime"></WorkoutReview>
+              <WorkoutReview v-for="(item, index) in cycle.exercises" :key="item" :workout-name="item.name" :repsOrTime="item.repsOrTime" @myEvent="kill(index, cycleIndex)"></WorkoutReview>
             </v-container>
           </v-card>
+          <p>{{cycles}}</p>
           </v-col>
       </v-row>
     </v-main>
@@ -31,19 +32,29 @@ import WorkoutReview from "@/components/WorkoutReview";
 
 
 export default {
-  data(){
-    return{
-      cicles:[
-        {
-          cycleName: "Warmup",
-          exercises: [
-            {
-              name:"Hola",
-              repsOrTime: "x10"
-            }
-          ],
-        }
-      ]
+  data() {
+    return {
+    cycles:[
+      {
+        cycleName: "Warmup",
+        exercises: [
+          {
+            name: "Hola",
+            repsOrTime: "x10"
+          },
+          {
+            name:"Martin",
+            repsOrTime: "50s"
+          }
+        ],
+      }
+    ]
+  }
+  },
+
+  methods:{
+    kill: function(index, cycleIndex){
+      this.cycles[cycleIndex].exercises.splice(index,1);
     }
   },
 

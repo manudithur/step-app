@@ -11,7 +11,7 @@
       </v-card>
     </v-col>
     <v-col cols="2" >
-      <v-btn @click="close(this)" icon class="mt-2 ml-4">
+      <v-btn @click="close()" icon class="mt-2 ml-4">
         <v-icon>
           mdi-delete
         </v-icon>
@@ -28,13 +28,17 @@ export default {
     },
     repsOrTime:{
       type:String
+    },
+    index:{
+      type:Number
     }
   },
   methods:{
-    close({root}) {
-      root.$destroy();
-      root.$el.parentNode.removeChild(root.$el);
+    close() {
+      this.$emit('myEvent');
+      //$emit que se suscriba a tu padre que le pase el indice del evento a borrar
   }},
+  emits:['myEvent'],
   name: "WorkoutReview"
 }
 </script>
