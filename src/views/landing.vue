@@ -7,7 +7,7 @@
             <v-col cols="4" class="pt-15" >
               <v-container class="white--text pt-15">
                 <h1 class="banner-text">Let us enhance your workout experience.</h1>
-                <p>Help us find a workout plan that fits your needs by answering 3 quick questions.</p>
+                <p class="subtitle">Help us find a workout plan that fits your needs by answering 3 quick questions.</p>
                 <v-btn x-large elevation="4" class="button rounded-lg white">
                   Join Now!
                 </v-btn>
@@ -119,7 +119,7 @@
   </template>
   
   <!-- Ojo con el important-->
-  <style>
+  <style scoped>
     
     .button{
       color:#1B56ED !important; 
@@ -130,6 +130,10 @@
       background: url(../assets/fondo.png);
       background-size: cover;
     }
+
+    .subtitle {
+      font-size: 20px;
+    }
   
     .banner-text {
       font-size: 65px;
@@ -137,6 +141,7 @@
     
     p {
       font-size: 15px;
+      color: white;
     }
   
   </style>

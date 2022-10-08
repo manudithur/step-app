@@ -24,7 +24,7 @@
 </template>
 
 <!-- Ojo con el important-->
-<style>
+<style scoped>
 
 .button{
   color:#1B56ED !important;

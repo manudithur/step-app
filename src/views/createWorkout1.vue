@@ -1,11 +1,9 @@
-
-
 <template>
   <v-app>
     <LoginNavBar />
     <v-main class="content">
       <v-row>
-        <v-col cols="2" />
+        <v-col cols="2"/>
         <v-col cols="8">
           <v-container class="mt-16 white--text">
             <h1>Create a new Workout:</h1>
