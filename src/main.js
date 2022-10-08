@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import App from './views/landing.vue'
+import App from './views/createWorkout2.vue'
 import vuetify from './plugins/vuetify'
 
 Vue.config.productionTip = false
