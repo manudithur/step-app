@@ -21,19 +21,11 @@ armar un archivo en ./views con el codigo de la pag que estan armando
 </style>
 
 <script>
-import LoginNavBar from './components/LoginNavBar.vue';
-import FooterBar from './components/FooterBar.vue';
 
 export default {
   name: 'App',
   data: () => ({
   
   }),
-
-  components: {
-    LoginNavBar,
-    FooterBar
 }
-
-};
 </script>
