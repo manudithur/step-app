@@ -91,6 +91,7 @@ import LoginNavBar from '../components/LoginNavBar.vue';
 import FooterBar from '../components/FooterBar.vue';
 import ExerciseData from "@/components/exerciseData";
 
+
 export default {
   name: 'App',
   data() {

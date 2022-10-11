@@ -15,10 +15,14 @@
                 <v-text-field
                   outlined
                   class="input"
-                  label="Email"
-                ></v-text-field>
-                <v-text-field outlined class="input" label="Password"
-                  ><v-icon>mdi-eye</v-icon
+                  label="Username"
+                  v-model="username"
+                >{{username}}</v-text-field>
+                <v-text-field
+                    outlined class="input"
+                    label="Password"
+                    v-model="password"
+                  >{{password}}<v-icon>mdi-eye</v-icon
                 ></v-text-field>
               </v-col>
             </v-row>
@@ -28,7 +32,10 @@
               </v-col>
             </v-row>
             <v-row class="justify-center">
-              <v-btn rounded large class="button"> Log in </v-btn>
+              <v-btn rounded
+                     large
+                     class="button"
+              @click="login()"> Log in </v-btn>
             </v-row>
           </v-card>
         </v-col>
@@ -84,17 +91,75 @@ p {
 }
 </style>
 
-  <script>
+<script>
+import { mapState, mapActions } from "pinia";
 import LoginNavBar from "../components/LoginNavBar.vue";
 import FooterBar from "../components/FooterBar.vue";
+import { useSecurityStore } from "../stores/SecurityStore";
+import { Credentials } from "../api/user";
+
 
 export default {
   name: "App",
-  data: () => ({}),
+  data: () => ({
+    result:null,
+    username:'',
+    password:''
+  }),
 
   components: {
     LoginNavBar,
     FooterBar,
+  },
+
+  async created() {
+    const securityStore = useSecurityStore();
+    await securityStore.initialize();
+  },
+
+  computed:{
+    ...mapState(useSecurityStore, {
+      $user: state => state.user,
+    }),
+    ...mapState(useSecurityStore, {
+      $isLoggedIn: 'isLoggedIn'
+    })
+  },
+
+  methods:{
+    ...mapActions(useSecurityStore, {
+      $getCurrentUser: 'getCurrentUser',
+      $login: 'login',
+      $logout: 'logout'
+    }),
+
+    setResult(result){
+      this.result = JSON.stringify(result, null, 2)
+    },
+
+    clearResult() {
+      this.result = null
+    },
+
+    async logout() {
+      await this.$logout()
+      this.clearResult()
+    },
+
+    async getCurrentUser() {
+      await this.$getCurrentUser()
+      this.setResult(this.$user)
+    },
+
+    async login() {
+      try {
+        const credentials = new Credentials(this.username, this.password)
+        await this.$login(credentials, true)
+        this.clearResult()
+      } catch (e) {
+        this.setResult(e)
+      }
+    }
   },
 };
 </script>

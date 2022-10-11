@@ -11,10 +11,21 @@
                 <v-text-field
                     outlined
                     class="input"
+                    label="username"
+                    v-model="username"
+                >{{username}}
+                </v-text-field>
+                <v-text-field
+                    outlined
+                    class="input"
                     label="Email"
-                ></v-text-field>
-                <v-text-field outlined class="input" label="Password"
-                ><v-icon>mdi-eye</v-icon
+                    v-model="email"
+                >{{email}}</v-text-field>
+                <v-text-field
+                    outlined class="input"
+                    label="Password"
+                    v-model="password"
+                >{{password}}<v-icon>mdi-eye</v-icon
                 ></v-text-field>
                 <v-text-field
                     outlined
@@ -24,7 +35,11 @@
               </v-col>
             </v-row>
             <v-row class="justify-center">
-              <v-btn rounded large class="button"> Sign Up </v-btn>
+              <v-btn rounded
+                     large
+                     class="button"
+              @click="addUser()"
+              > Sign Up </v-btn>
             </v-row>
           </v-card>
         </v-col>
@@ -73,14 +88,75 @@ p {
 <script>
 import LoginNavBar from "../components/LoginNavBar.vue";
 import FooterBar from "../components/FooterBar.vue";
+import { mapState, mapActions } from "pinia";
+import { useSecurityStore } from "../stores/SecurityStore";
+import {User} from "@/api/user";
+
+
 
 export default {
   name: "App",
-  data: () => ({}),
+  data: () => ({
+    username:'',
+    email:'',
+    password:''
+  }),
 
   components: {
     LoginNavBar,
     FooterBar,
   },
+
+  async created() {
+    const securityStore = useSecurityStore();
+    await securityStore.initialize();
+  },
+
+  computed:{
+    ...mapState(useSecurityStore, {
+      $user: state => state.user,
+    }),
+    ...mapState(useSecurityStore, {
+      $isLoggedIn: 'isLoggedIn'
+    })
+  },
+
+  methods: {
+    ...mapActions(useSecurityStore, {
+      $getCurrentUser: 'getCurrentUser',
+      $login: 'login',
+      $logout: 'logout',
+      $addUser: 'addUser'
+    }),
+
+    setResult(result) {
+      this.result = JSON.stringify(result, null, 2)
+    },
+
+    async addUser(){
+        const user = await new User(this.username, this.email, this.password)
+      try{
+        await this.$addUser(user)
+      }
+      catch(e){
+          console.log(e);
+      }
+    },
+
+    async logout() {
+      await this.$logout()
+      this.clearResult()
+    },
+
+    clearResult() {
+      this.result = null
+    },
+
+
+    async getCurrentUser() {
+      await this.$getCurrentUser()
+      this.setResult(this.$user)
+    }
+  }
 };
 </script>

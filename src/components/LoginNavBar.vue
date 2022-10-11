@@ -8,7 +8,8 @@
             </v-app-bar-title>
             <v-spacer></v-spacer>
             <v-toolbar-items>
-                <v-btn text class="bar-btn">
+                <v-btn text class="bar-btn"
+                ><router-link to="/login"></router-link>
                     Sign In / Sign Up
                 </v-btn>
             </v-toolbar-items>

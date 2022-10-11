@@ -6,17 +6,27 @@
         <v-col cols="5">
           <v-card class="rounded-xl centerCard pa-12">
             <h1 class="onGrey text-center mb-8">Verify Email</h1>
-            <p class="text-center">A code was sent to <b>example@gmail.com</b>
-              <br>Enter the code you received</p>
+            <p class="text-center">A code was sent to your account
+              <br>Enter your email and the code you received</p>
+            <v-row class="justify-center">
+              <v-text-field
+                  outlined
+                  class="input"
+                  label="email"
+                  v-model="email"
+              >{{email}}</v-text-field>
+            </v-row>
             <v-row class="justify-center">
               <v-col cols="8">
                 <v-otp-input
                     length="6"
-                ></v-otp-input>
+                    v-model="code"
+                >{{code}}</v-otp-input>
               </v-col>
             </v-row>
             <v-row class="justify-center">
-              <v-btn rounded large class="button">Verify</v-btn>
+              <v-btn rounded large class="button"
+              @click="verify">Verify</v-btn>
             </v-row>
           </v-card>
         </v-col>
@@ -65,14 +75,50 @@ p {
 <script>
 import LoginNavBar from "../components/LoginNavBar.vue";
 import FooterBar from "../components/FooterBar.vue";
+import { mapState, mapActions } from "pinia";
+import { useSecurityStore } from "../stores/SecurityStore";
+import {VerificationData} from "@/api/user";
+
 
 export default {
   name: "App",
-  data: () => ({}),
+  data: () => ({
+    code:'',
+    email:''
+  }),
 
   components: {
     LoginNavBar,
     FooterBar,
   },
+
+  async created() {
+    const securityStore = useSecurityStore();
+    await securityStore.initialize();
+  },
+
+  computed:{
+    ...mapState(useSecurityStore, {
+      $user: state => state.user,
+    }),
+    ...mapState(useSecurityStore, {
+      $isLoggedIn: 'isLoggedIn'
+    })
+  },
+
+  methods:{
+    ...mapActions(useSecurityStore, {
+      $getCurrentUser: 'getCurrentUser',
+      $login: 'login',
+      $logout: 'logout',
+      $verify: 'verify'
+    }),
+
+    async verify(){
+      const verificationData = new VerificationData(this.email, this.code)
+      await this.$verify(verificationData)
+
+    }
+  }
 };
 </script>
