@@ -27,10 +27,7 @@ export default {
   data: () => ({
   
   }),
-<<<<<<< HEAD
 
 };
-=======
-}
->>>>>>> 5e0b40e3806edaf633946b29dc867c529572d2a1
+
 </script>

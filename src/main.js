@@ -1,9 +1,7 @@
 import Vue from 'vue'
-<<<<<<< HEAD
-import App from './views/createExercise.vue'
-=======
+
 import App from './App.vue'
->>>>>>> 5e0b40e3806edaf633946b29dc867c529572d2a1
+
 import vuetify from './plugins/vuetify'
 import router from './router'
 import { createPinia, PiniaVuePlugin } from "pinia";
