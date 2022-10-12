@@ -1,0 +1,265 @@
+<template>
+  <v-app>
+    <LoginNavBar />
+    <v-main class="content">
+      <v-window v-model="step">
+        <v-window-item :value="1">
+          <v-row>
+            <v-col cols="2"/>
+            <v-col cols="8">
+              <v-container class="mt-16 white--text">
+                <h1>Create a new Workout:</h1>
+                <h3 class="mt-16">Step 1: Workout Info</h3>
+              </v-container>
+              <v-card class="white rounded-xl pa-5">
+                <v-row>
+                  <v-col cols="4" class="text-center">
+                    <h5 class="onWhite mt-6">Workout Name</h5>
+                  </v-col>
+                  <v-col cols="6">
+                    <v-text-field
+                      class="mt-4 inputField"
+                      solo
+                      rounded
+                      single-line
+                      dark
+                      background-color="#55B8FF"
+                    >Workout Name</v-text-field>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col cols="4" class="text-center">
+                    <h5 class="onWhite mt-2">Category</h5>
+                  </v-col>
+                  <v-col cols="6">
+                    <v-select
+                      class="justify-center"
+                      v-model="select1"
+                      :items="items1"
+                      rounded
+                      single-line
+                      solo
+                      background-color="#55B8FF"
+                      dark
+                    />
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col cols="4" class="text-center">
+                    <h5 class="onWhite mt-2">Intensity</h5>
+                  </v-col>
+                  <v-col cols="6">
+                    <v-select
+                      :items="items2"
+                      rounded
+                      single-line
+                      solo
+                      background-color="#55B8FF"
+                      dark
+                    />
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col cols="4" class="text-center">
+                    <h5 class="onWhite mt-2">Cover Image</h5>
+                  </v-col>
+                  <v-col cols="6">
+                      <v-btn
+                        class="mb-4 py-6 white--text"
+                        block
+                        color="#55B8FF"
+                        rounded
+                      ><input type="file" hidden> Attach Image</v-btn>
+                  </v-col>
+                </v-row>
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-window-item>
+        <v-window-item :value="2">
+          <v-row>
+            <v-col cols="2" />
+            <v-col cols="8">
+              <v-container class="mt-16 white--text">
+                <h1>Create a new Workout:</h1>
+                <h3 class="mt-16">Step 2: Create Routine</h3>
+              </v-container>
+
+              <v-card class="white rounded-xl  mb-15">
+                <v-row>
+                  <v-btn
+                      class="cycleButton"
+                      v-for="(stage, index) in stages" :key="stage.message"
+                      @click="updateStage(index)">
+                    {{stage.message}}
+                  </v-btn>
+                </v-row>
+              </v-card>
+
+              <v-window>
+                <v-window-item
+                    v-for="(stage) in stages" :key="stage.message"
+                >
+                  <v-card class="white rounded-xl pa-5 mb-15">
+                    <h1 class="ma-5">{{title}}</h1>
+                    <v-row v-for="i in count " :key="`${i}`">
+                      <ExerciseData class="ma-5"></ExerciseData>
+                    </v-row>
+                    <v-row class="justify-center">
+                      <v-btn
+                          @click="updateContent()"
+                          class="addButton"
+                          small
+                      >+</v-btn>
+                    </v-row>
+                  </v-card>
+                </v-window-item>
+              </v-window>
+            </v-col>
+          </v-row>
+        </v-window-item>
+        <v-window-item :value="3">
+          <v-row>
+            <v-col cols="2"/>
+            <v-col cols="8">
+              <v-container class="mt-5 white--text">
+                <h1>Create a new Workout:</h1>
+                <h3 class="mt-6">Step 3: Review Workout</h3>
+              </v-container>
+              <v-card class = "white rounded-xl pa-5">
+                <v-container v-for="(cycle, cycleIndex) in cycles" :key="cycle.cycleName">
+                  <v-row>
+                    <h2 class="onWhite ma-4">{{cycle.cycleName}}</h2>
+                  </v-row>
+                  <WorkoutReview v-for="(item, index) in cycle.exercises" :key="item" :workout-name="item.name" :repsOrTime="item.repsOrTime" @myEvent="kill(index, cycleIndex)"></WorkoutReview>
+                </v-container>
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-window-item>
+        </v-window>
+      <v-row class="mb-16">
+        <v-col cols="9" />
+        <v-col cols="1">
+          <v-btn v-if="step !== 3" rounded elevation="5" class="pa-7 mb-16 mt-10 next" width="100%" @click="step++">Next</v-btn>
+          <v-btn v-if="step === 3" rounded elevation="5" class="pa-7 mb-16 mt-10 next" width="100%" @click="addRoutine">Finish</v-btn>
+        </v-col>
+      </v-row>
+    </v-main>
+    <FooterBar />
+  </v-app>
+</template>
+
+<style scoped>
+
+  .inputField >>> input{
+    text-align: center;
+  }
+
+  .v-select__selection {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .content {
+    background: url(../assets/fondo.png);
+    background-size: cover;
+  }
+  .onWhite {
+    color: #5a6175;
+    font-size: x-large;
+    margin-left: 7%;
+    margin-right: 7%;
+  }
+
+  .next {
+    font-weight: bold;
+    font-size: 20px;
+  }
+
+  .button{
+    color:#1B56ED !important;
+    font-weight:bold;
+
+  }
+
+  .addButton{
+    background: #55B8FF !important;
+    color: white !important;
+
+  }
+
+  .cycleButton {
+    background: #55B8FF !important;
+    color: white !important;
+    max-width: 600px;
+    margin: 15px 25px;
+    padding: 15px;
+  }
+
+  .banner-text {
+    font-size: 65px;
+  }
+
+  p {
+    font-size: 15px;
+  }
+
+
+ </style>
+
+<script>
+import LoginNavBar from "@/components/LoginNavBar";
+import FooterBar from "@/components/FooterBar";
+
+export default {
+  data() {
+    return {
+      select1: "Full Body",
+      items1: ["Chest", "Back", "Bicep", "Tricep", "Abs"],
+      items2: ["Very High", "High", "Moderate", "Low", "Very Low"],
+      step:1,
+      selectedStage: 0,
+      stages: [{message:"Warmup", counter: 0}, {message:"Cycle 1", counter: 0}, {message:"Cooldown", counter: 0}],
+      cycles:[
+        {
+          cycleName: "Warmup",
+          exercises: [
+            {
+              name: "Hola",
+              repsOrTime: "x10"
+            },
+            {
+              name:"Martin",
+              repsOrTime: "50s"
+            }
+          ],
+        }
+      ]
+    };
+  },
+
+  methods: {
+    updateStage(index) {
+      this.selectedStage = index;
+    },
+
+    updateContent(){
+      this.stages[this.selectedStage].counter++
+    }
+  },
+
+  computed: {
+    title() {
+      return this.stages[this.selectedStage].message
+    },
+    count(){
+      return this.stages[this.selectedStage].counter
+    }
+  },
+
+  name: "createWorkout",
+  components: { FooterBar, LoginNavBar },
+};
+</script>
+

@@ -9,7 +9,9 @@
   },
   "dependencies": {
     "@mdi/font": "^7.0.96",
+    "@vue/composition-api": "^1.7.1",
     "core-js": "^3.8.3",
+    "pinia": "^2.0.23",
     "vue": "^2.6.14",
     "vue-router": "^3.6.5",
     "vuetify": "^2.6.0"
