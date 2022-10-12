@@ -14,10 +14,14 @@
             class="input"
             label="search"
         ></v-text-field>
-
+        <div>
+          <ul>
+            <li v-for="(e) in this.exercises" :key="e.id">
+              {{e.name}}
+            </li>
+          </ul>
+        </div>
       </v-container>
-
-
     </v-main>
     <FooterBar/>
   </v-app>
@@ -54,13 +58,14 @@ import LoginNavBar from '../components/LoginNavBar.vue';
 import FooterBar from '../components/FooterBar.vue';
 import { mapState, mapActions } from "pinia"
 import { useSecurityStore } from "@/stores/SecurityStore";
-import { useExerciseStore } from "@/stores/exercisestore";
+import { useExerciseStore } from "@/stores/exerciseStore";
 
 export default {
   name: 'App',
   data: () => ({
     value:50,
-    controler:''
+    controller:'',
+    exercises: undefined
   }),
 
   components: {
@@ -68,9 +73,16 @@ export default {
     FooterBar
   },
 
-  async created() {
-    const securityStore = useSecurityStore();
-    await securityStore.initialize();
+   created() {
+    //const securityStore = useSecurityStore();
+    //await securityStore.initialize();
+    //this.exercises = await this.getAllExercises().content;
+    //await this.getAllExercises().then((value) => {
+
+     this.getAllExercises();
+
+
+    //this.exercises= useExerciseStore().getAll().content;
   },
 
   computed:{
@@ -107,6 +119,7 @@ export default {
       try {
         this.controller = new AbortController()
         const exercises = await this.$getAllExercises(this.controller);
+        this.exercises= exercises.content;
         this.controller = null
         this.setResult(exercises)
       } catch(e) {
