@@ -8,8 +8,11 @@
             <h1 class="onGrey text-center">Login</h1>
             <p class="text-center">
               New to Step?
-              <span class="signUp">Sign up for free</span>
+              <router-link to="/signup">
+                <span class="signUp">Sign up for free</span>
+              </router-link>  
             </p>
+            <p class="red--text text-center">{{errorMsg}}</p>
             <v-row class="justify-center">
               <v-col cols="8">
                 <v-text-field
@@ -21,6 +24,7 @@
                 <v-text-field
                     outlined class="input"
                     label="Password"
+                    type="password"
                     v-model="password"
                   >{{password}}<v-icon>mdi-eye</v-icon
                 ></v-text-field>
@@ -33,8 +37,8 @@
             </v-row>
             <v-row class="justify-center">
               <v-btn rounded
-                     large
-                     class="button"
+                    large
+                    class="button"
               @click="login()"> Log in </v-btn>
             </v-row>
           </v-card>
@@ -48,7 +52,7 @@
   <!-- Ojo con el important-->
 <style scoped>
 .input {
-  padding-top: 30px;
+  padding-top: 5px;
 }
 
 .link {
@@ -97,6 +101,7 @@ import LoginNavBar from "../components/LoginNavBar.vue";
 import FooterBar from "../components/FooterBar.vue";
 import { useSecurityStore } from "../stores/SecurityStore";
 import { Credentials } from "../api/user";
+import router from '@/router';
 
 
 export default {
@@ -104,7 +109,8 @@ export default {
   data: () => ({
     result:null,
     username:'',
-    password:''
+    password:'',
+    errorMsg: ' '
   }),
 
   components: {
@@ -123,7 +129,10 @@ export default {
     }),
     ...mapState(useSecurityStore, {
       $isLoggedIn: 'isLoggedIn'
-    })
+    }),
+    error(){
+      return this.errorMsg
+    }
   },
 
   methods:{
@@ -135,6 +144,7 @@ export default {
 
     setResult(result){
       this.result = JSON.stringify(result, null, 2)
+      this.errorMsg = this.result.description
     },
 
     clearResult() {
@@ -158,6 +168,11 @@ export default {
         this.clearResult()
       } catch (e) {
         this.setResult(e)
+        this.errorMsg = "Username/Password invalid"
+        console.log(this.result)
+      } finally{
+        if(this.result == null)
+          router.push('/home')
       }
     }
   },

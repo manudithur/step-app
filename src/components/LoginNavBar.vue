@@ -1,17 +1,18 @@
 <template>
     <v-app-bar id="navbar" height="100%" elevation="4" app>
             <v-app-bar-title>
-                <v-img src="../assets/stepApp.png" 
-                contain
-                max-width="20%"
-                ></v-img>
+                <router-link to="/">
+                    <v-img src="../assets/stepApp.png" 
+                    contain
+                    max-width="20%"
+                    ></v-img>
+                </router-link>
             </v-app-bar-title>
             <v-spacer></v-spacer>
-            <v-toolbar-items>
-                <v-btn text class="bar-btn"
-                ><router-link to="/login"></router-link>
-                    Sign In / Sign Up
-                </v-btn>
+            <v-toolbar-items class="align-center">
+                <router-link class="RLink" to="/login">
+                    <v-btn text class="bar-btn">Sign In / Sign Up</v-btn>
+                </router-link>
             </v-toolbar-items>
     </v-app-bar>
 </template>

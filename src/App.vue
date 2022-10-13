@@ -18,6 +18,11 @@ armar un archivo en ./views con el codigo de la pag que estan armando
     background: url(./assets/fondo.png);
     background-size: cover;
   }
+
+  .RLink{
+    text-decoration: none;
+  }
+
 </style>
 
 <script>
@@ -27,10 +32,5 @@ export default {
   data: () => ({
   
   }),
-<<<<<<< HEAD
-
-};
-=======
 }
->>>>>>> 5e0b40e3806edaf633946b29dc867c529572d2a1
 </script>

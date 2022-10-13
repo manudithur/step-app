@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <LoginNavBar />
+    <NavBar/>
     <v-main class="content">
       <v-window v-model="step">
         <v-window-item :value="1">
@@ -209,7 +209,7 @@
  </style>
 
 <script>
-import LoginNavBar from "@/components/LoginNavBar";
+import NavBar from "@/components/NavBar";
 import FooterBar from "@/components/FooterBar";
 
 export default {
@@ -259,7 +259,7 @@ export default {
   },
 
   name: "createWorkout",
-  components: { FooterBar, LoginNavBar },
+  components: { FooterBar, NavBar },
 };
 </script>
 

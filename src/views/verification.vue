@@ -8,6 +8,7 @@
             <h1 class="onGrey text-center mb-8">Verify Email</h1>
             <p class="text-center">A code was sent to your account
               <br>Enter your email and the code you received</p>
+            <p class="red--text text-center">{{error}}</p>
             <v-row class="justify-center">
               <v-text-field
                   outlined
@@ -78,13 +79,15 @@ import FooterBar from "../components/FooterBar.vue";
 import { mapState, mapActions } from "pinia";
 import { useSecurityStore } from "../stores/SecurityStore";
 import {VerificationData} from "@/api/user";
+import router from '@/router';
 
 
 export default {
   name: "App",
   data: () => ({
     code:'',
-    email:''
+    email:'',
+    error: ' '
   }),
 
   components: {
@@ -115,8 +118,16 @@ export default {
     }),
 
     async verify(){
+      this.error = ' '
       const verificationData = new VerificationData(this.email, this.code)
-      await this.$verify(verificationData)
+      try{
+        await this.$verify(verificationData)
+      } catch(e){
+        this.error = "Invalid code or email"
+      } finally{
+        if(this.error == ' ')
+          router.push('/login')
+      }
 
     }
   }
