@@ -149,6 +149,7 @@
           <v-btn v-if="step === 3" rounded elevation="5" class="pa-7 mb-16 mt-10 next" width="100%" @click="createRoutine">Finish</v-btn>
         </v-col>
       </v-row>
+      <createExercise/>
     </v-main>
     <FooterBar />
   </v-app>
@@ -220,6 +221,8 @@ import {useSecurityStore} from "@/stores/SecurityStore";
 import {useRoutineStore} from "@/stores/routineStore";
 import {Routine} from "@/api/routine";
 import ExerciseData from "@/components/exerciseData";
+
+import createExercise from "@/components/createExercise";
 
 export default {
   data() {
@@ -324,7 +327,7 @@ export default {
   },
 
   name: "createWorkout",
-  components: { FooterBar, NavBar, ExerciseData },
+  components: { FooterBar, NavBar, ExerciseData, createExercise },
 };
 </script>
 
