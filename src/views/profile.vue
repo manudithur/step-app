@@ -9,21 +9,37 @@
             <v-row class="justify-center">
               <v-col cols="8">
                 <v-text-field
-                  outlined
-                  :disabled="edit == 0"
-                  class="input"
-                  label="Username"
-                  v-model="username"
-                  >{{ username }}
+                    outlined
+                    disabled
+                    class="input"
+                    label="Username"
+                    v-model="username"
+                >{{ username }}
                 </v-text-field>
                 <v-text-field
-                  outlined
-                  :disabled="edit == 0"
-                  class="input"
-                  label="Email"
-                  v-model="email"
-                  >{{ email }}</v-text-field
+                    outlined
+                    disabled
+                    class="input"
+                    label="Email"
+                    v-model="email"
+                >{{ email }}</v-text-field
                 >
+                <v-text-field
+                    outlined
+                    :disabled="edit == 0"
+                    class="input"
+                    label="First Name"
+                    v-model="firstName"
+                >{{ firstName }}
+                </v-text-field>
+                <v-text-field
+                    outlined
+                    :disabled="edit == 0"
+                    class="input"
+                    label="Last Name"
+                    v-model="lastName"
+                >{{ lastName }}
+                </v-text-field>
               </v-col>
             </v-row>
             <v-row class="justify-center">
@@ -31,7 +47,7 @@
                 Edit
                 <v-icon class="ml-1 white--text" size="20">mdi-pencil</v-icon>
               </v-btn>
-              <v-btn rounded large class="button" v-if="edit==1" @click="editEvent()">
+              <v-btn rounded large class="button" v-if="edit==1" @click="saveChanges()">
                 Save Changes
                 <v-icon class="ml-1 white--text" size="20">mdi-check</v-icon>
               </v-btn>
@@ -71,23 +87,30 @@ import { mapState, mapActions } from "pinia";
 import NavBar from "../components/NavBar.vue";
 import FooterBar from "../components/FooterBar.vue";
 import { useSecurityStore } from "../stores/SecurityStore";
+import { Editables } from "../api/user";
+//import router from "@/router"
+
 
 export default {
   name: "App",
   data: () => ({
     edit: 0,
     username: null,
+    firstName: null,
+    lastName: null,
     email: null,
   }),
 
   async created() {
     const securityStore = useSecurityStore();
     await securityStore.initialize();
+    await this.$getCurrentUser();
+    this.username = this.$user.username
+    this.email = this.$user.email
+    this.firstName= this.$user.firstName
+    this.lastName= this.$user.lastName
   },
 
-  mounted(){
-    this.loadData();
-  },    
 
   computed:{
     ...mapState(useSecurityStore, {
@@ -109,6 +132,8 @@ export default {
   methods: {
     ...mapActions(useSecurityStore, {
       $getCurrentUser: 'getCurrentUser',
+      $saveEdit: 'saveEdit'
+
     }),
 
     editEvent: function(){
@@ -118,8 +143,10 @@ export default {
             this.edit = 0;
     },
 
-    async loadData(){
-        //agarrar data del user
+    async saveChanges(){
+      const editable = new Editables(this.firstName, this.lastName)
+      await this.$saveEdit(editable)
+      this.edit=0;
     }
 
   }
