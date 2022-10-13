@@ -9,7 +9,7 @@
     ></v-select>
     <v-btn-toggle></v-btn-toggle>
     <v-btn @click="decreaseAmount()">-</v-btn>
-    <span class="pa-2"> {{ amount }} </span>
+    <span class="pa-2"> {{ repsOrTime}} </span>
     <v-btn @click="increaseAmount()">+</v-btn>
     <v-btn><v-icon
     @click="removeElement()">mdi-delete</v-icon></v-btn>
@@ -24,27 +24,28 @@
   export default{
     name: 'ExerciseData',
 
-    data(){
-      return{
-        amount: 1
+    props:{
+      repsOrTime:{
+        type:Number
       }
     },
 
     methods: {
       increaseAmount() {
-        this.amount++;
+        this.$emit('increaseAmount');
       },
 
-      decreaseAmount(){
-        if(this.amount>0){
-          this.amount--;
-        }
+      decreaseAmount() {
+        this.$emit('decreaseAmount');
       },
 
       removeElement() {
-        //metodo del store para sacar del array al ejercicio
+        this.$emit('deleteElement');
       }
+
     },
+
+    emits:['deleteElement','decreaseAmount','increaseAmount'],
 
     computed: {
 

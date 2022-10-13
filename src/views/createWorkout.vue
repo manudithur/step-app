@@ -90,21 +90,19 @@
                 <v-row>
                   <v-btn
                       class="cycleButton"
-                      v-for="(stage, index) in stages" :key="stage.message"
+                      v-for="(cycle, index) in cycles" :key="cycle.cycleName"
                       @click="updateStage(index)">
-                    {{stage.message}}
+                    {{cycle.cycleName}}
                   </v-btn>
                 </v-row>
               </v-card>
 
               <v-window>
-                <v-window-item
-                    v-for="(stage) in stages" :key="stage.message"
-                >
+                <v-window-item  v-for="(cycle) in cycles" :key="cycle.cycleName">
                   <v-card class="white rounded-xl pa-5 mb-15">
-                    <h1 class="ma-5">{{title}}</h1>
-                    <v-row v-for="i in count " :key="`${i}`">
-                      <ExerciseData class="ma-5"></ExerciseData>
+                    <h1 class="ma-5">{{cycles[selectedStage].cycleName}}</h1>
+                    <v-row v-for="(exercise, index) in cycles[selectedStage].exercises" :key="exercise.name">
+                      <ExerciseData class="ma-5" :reps-or-time="exercise.repsOrTime" @decreaseAmount="decreaseAmount(index)" @increaseAmount="increaseAmount(index)" @deleteElement="deleteElement(index)"></ExerciseData>
                     </v-row>
                     <v-row class="justify-center">
                       <v-btn
@@ -132,6 +130,7 @@
                   <v-row>
                     <h2 class="onWhite ma-4">{{cycle.cycleName}}</h2>
                   </v-row>
+                  <p>{{cycle.exercises}}</p>
                   <WorkoutReview v-for="(item, index) in cycle.exercises" :key="item" :workout-name="item.name" :repsOrTime="item.repsOrTime" @myEvent="kill(index, cycleIndex)"></WorkoutReview>
                 </v-container>
               </v-card>
@@ -228,28 +227,40 @@ export default {
       wname:"",
       wdescription:"",
       wdifficulty:"rookie",
-      wstages:[{stagename:"",exercises:[{exname:"",reps:""}]}],
       select1: "Full Body",
       items1: ["Chest", "Back", "Bicep", "Tricep", "Abs"],
       items2: ["Very High", "High", "rookie", "Low", "Very Low"],
       step:1,
       selectedStage: 0,
-      stages: [{message:"Warmup", counter: 0}, {message:"Cycle 1", counter: 0}, {message:"Cooldown", counter: 0}],
       cycles:[
         {
           cycleName: "Warmup",
           exercises: [
             {
-              name: "Hola",
-              repsOrTime: "x10"
-            },
-            {
-              name:"Martin",
-              repsOrTime: "50s"
+              name: "",
+              repsOrTime: 1
             }
           ],
-        }
-      ]
+        },
+        {
+          cycleName:"Cycle 1",
+          exercises: [
+            {
+              name: "",
+              repsOrTime: 1
+            }
+          ],
+        },
+        {
+          cycleName: "Cooldown",
+          exercises: [
+            {
+              name: "",
+              repsOrTime: 0
+            }
+          ],
+        },
+      ],
     };
   },
 
@@ -259,8 +270,12 @@ export default {
     },
 
     updateContent(){
-      this.stages[this.selectedStage].counter++
+      this.cycles[this.selectedStage].exercises.push({name:"",repsOrTime: "1"})
+      console.log(this.cycles)
     },
+
+
+
     ...mapActions(useRoutineStore,{
       $createRoutine: 'create'
     }),
@@ -274,16 +289,30 @@ export default {
     async createRoutine(){
       const routine = new Routine(this.wname, this.wdescription,true, this.wdifficulty);
       this.routine = await this.$createRoutine(routine);
+    },
+
+    kill(index, cycleIndex){
+      this.cycles[cycleIndex].exercises.splice(index,1);
+    },
+
+    increaseAmount(index) {
+      this.cycles[this.selectedStage].exercises[index].repsOrTime++;
+    },
+
+    decreaseAmount(index) {
+      if (this.cycles[this.selectedStage].exercises[index].repsOrTime > 0)
+        this.cycles[this.selectedStage].exercises[index].repsOrTime--;
+    },
+
+    deleteElement(index){
+      this.cycles[this.selectedStage].exercises.splice(index,1);
     }
   },
 
 
   computed: {
     title() {
-      return this.stages[this.selectedStage].message
-    },
-    count(){
-      return this.stages[this.selectedStage].counter
+      return this.cycles[this.selectedStage].cycleName
     },
   ...mapState(useSecurityStore, {
     $user: state => state.user,

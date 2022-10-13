@@ -27,7 +27,7 @@ export default {
       type:String
     },
     repsOrTime:{
-      type:String
+      type:Number
     },
     index:{
       type:Number
