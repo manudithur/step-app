@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <LoginNavBar />
+    <NavBar />
     <v-main class="content mt-10">
       <v-row class="ml-10 pt-5 white--text">
         <h1 class="ml-10">Chest Pump</h1>
@@ -44,7 +44,7 @@
 </style>
   
 <script>
-import LoginNavBar from "../components/LoginNavBar.vue";
+import NavBar from "../components/NavBar.vue";
 import FooterBar from "../components/FooterBar.vue";
 
 export default {
@@ -54,7 +54,7 @@ export default {
   }),
 
   components: {
-    LoginNavBar,
+    NavBar,
     FooterBar,
   },
 };

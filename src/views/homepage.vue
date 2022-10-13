@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <LoginNavBar/>
+    <NavBar/>
     <v-main class="content">
       <v-container fluid class="pb-10">
         <v-row class="justify-center pa-0 pt-10">
@@ -202,7 +202,7 @@ p {
 </style>
 
 <script>
-import LoginNavBar from '../components/LoginNavBar.vue';
+import NavBar from '../components/NavBar.vue';
 import FooterBar from '../components/FooterBar.vue';
 
 export default {
@@ -212,7 +212,7 @@ export default {
   }),
 
   components: {
-    LoginNavBar,
+    NavBar,
     FooterBar
   }
 

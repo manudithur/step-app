@@ -11,7 +11,7 @@
                 <v-text-field
                     outlined
                     class="input"
-                    label="username"
+                    label="Username"
                     v-model="username"
                 >{{username}}
                 </v-text-field>
@@ -25,11 +25,14 @@
                     outlined class="input"
                     label="Password"
                     v-model="password"
+                    type="password"
                 >{{password}}<v-icon>mdi-eye</v-icon
                 ></v-text-field>
                 <v-text-field
                     outlined
                     class="input"
+                    v-model="Rpassword"
+                    type="password"
                     label="Repeat Password"
                 ></v-text-field>
               </v-col>
@@ -52,7 +55,7 @@
 <!-- Ojo con el important-->
 <style scoped>
 .input {
-  padding-top: 30px;
+  padding-top: 5px;
 }
 
 .onGrey {
@@ -91,6 +94,7 @@ import FooterBar from "../components/FooterBar.vue";
 import { mapState, mapActions } from "pinia";
 import { useSecurityStore } from "../stores/SecurityStore";
 import {User} from "@/api/user";
+import router from '@/router';
 
 
 
@@ -99,7 +103,8 @@ export default {
   data: () => ({
     username:'',
     email:'',
-    password:''
+    password:'',
+    error: null
   }),
 
   components: {
@@ -134,12 +139,17 @@ export default {
     },
 
     async addUser(){
+        this.error = null;
         const user = await new User(this.username, this.email, this.password)
       try{
         await this.$addUser(user)
       }
       catch(e){
           console.log(e);
+          this.error = true;
+      } finally{
+        if(this.error == null)
+          router.push('/verification')
       }
     },
 

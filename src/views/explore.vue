@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <LoginNavBar/>
+    <NavBar/>
     <v-main class="content">
       <v-container fluid class="pb-10 pt-5">
         <v-text-field
@@ -54,7 +54,7 @@ p {
 </style>
 
 <script>
-import LoginNavBar from '../components/LoginNavBar.vue';
+import NavBar from '../components/NavBar.vue';
 import FooterBar from '../components/FooterBar.vue';
 import { mapState, mapActions } from "pinia"
 import { useSecurityStore } from "@/stores/SecurityStore";
@@ -69,7 +69,7 @@ export default {
   }),
 
   components: {
-    LoginNavBar,
+    NavBar,
     FooterBar
   },
 

@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <LoginNavBar/>
+    <NavBar/>
     <v-main class="content">
       <v-row class="justify-center ma-10">
         <v-col>
@@ -71,7 +71,7 @@ import { mapState, mapActions } from "pinia";
 import {Exercise} from "../api/exercise"
 import { useExerciseStore } from "../stores/exerciseStore";
 import { useSecurityStore } from "@/stores/SecurityStore";
-import LoginNavBar from '../components/LoginNavBar.vue';
+import NavBar from '../components/LoginNavBar.vue';
 import FooterBar from '../components/FooterBar.vue';
 
 
@@ -118,7 +118,7 @@ export default {
   },
 
   components: {
-    LoginNavBar,
+    NavBar,
     FooterBar,
   }
 
