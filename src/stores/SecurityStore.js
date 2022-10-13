@@ -62,6 +62,10 @@ export const useSecurityStore = defineStore("security", {
 
             const result = await UserApi.get();
             this.setUser(result);
+        },
+
+        async saveEdit(editables){
+            await UserApi.saveEdit(editables);
         }
     },
 });

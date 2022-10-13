@@ -1,6 +1,6 @@
 import {Api} from "./api"
 
-export {UserApi, Credentials, User, VerificationData}
+export {UserApi, Credentials, User, VerificationData,Editables}
 
 class UserApi{
     static getUrl(slug){
@@ -19,6 +19,10 @@ class UserApi{
         return await Api.post(UserApi.getUrl('verify_email'), false, verificationData)
     }
 
+    static async saveEdit(editables){
+        return await Api.put(UserApi.getUrl('current'), true, editables)
+    }
+
     static async logout(){
         return await Api.post(UserApi.getUrl('logout'),true)
     }
@@ -26,6 +30,7 @@ class UserApi{
     static async get(){
         return Api.get(UserApi.getUrl('current'),true)
     }
+
 }
 
 class Credentials{
@@ -49,5 +54,12 @@ class VerificationData{
     constructor(email, code){
         this.email=email;
         this.code=code;
+    }
+}
+
+class Editables{
+    constructor(firstName, lastName){
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
 }
