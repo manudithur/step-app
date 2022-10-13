@@ -24,24 +24,24 @@
                       single-line
                       dark
                       background-color="#55B8FF"
+                      v-model="wname"
                     >Workout Name</v-text-field>
                   </v-col>
                 </v-row>
                 <v-row>
                   <v-col cols="4" class="text-center">
-                    <h5 class="onWhite mt-2">Category</h5>
+                    <h5 class="onWhite mt-5">Description</h5>
                   </v-col>
                   <v-col cols="6">
-                    <v-select
-                      class="justify-center"
-                      v-model="select1"
-                      :items="items1"
-                      rounded
-                      single-line
-                      solo
-                      background-color="#55B8FF"
-                      dark
-                    />
+                    <v-text-field
+                        class="mt-4 inputField"
+                        solo
+                        rounded
+                        single-line
+                        dark
+                        background-color="#55B8FF"
+                        v-model="wdescription"
+                    >{{ wdescription }}</v-text-field>
                   </v-col>
                 </v-row>
                 <v-row>
@@ -56,6 +56,7 @@
                       solo
                       background-color="#55B8FF"
                       dark
+                      v-model="wdifficulty"
                     />
                   </v-col>
                 </v-row>
@@ -139,10 +140,14 @@
         </v-window-item>
         </v-window>
       <v-row class="mb-16">
-        <v-col cols="9" />
+        <v-col cols="2" />
+        <v-col cols="1">
+        <v-btn v-if="step !== 1 " rounded elevation="5" class="pa-7 mb-16 mt-10 next" width="100%" @click="step--">Prev</v-btn>
+        </v-col>
+        <v-col cols="6"/>
         <v-col cols="1">
           <v-btn v-if="step !== 3" rounded elevation="5" class="pa-7 mb-16 mt-10 next" width="100%" @click="step++">Next</v-btn>
-          <v-btn v-if="step === 3" rounded elevation="5" class="pa-7 mb-16 mt-10 next" width="100%" @click="addRoutine">Finish</v-btn>
+          <v-btn v-if="step === 3" rounded elevation="5" class="pa-7 mb-16 mt-10 next" width="100%" @click="createRoutine">Finish</v-btn>
         </v-col>
       </v-row>
     </v-main>
@@ -211,13 +216,22 @@
 <script>
 import NavBar from "@/components/NavBar";
 import FooterBar from "@/components/FooterBar";
+import {mapActions, mapState} from "pinia";
+import {useSecurityStore} from "@/stores/SecurityStore";
+import {useRoutineStore} from "@/stores/routineStore";
+import {Routine} from "@/api/routine";
+import ExerciseData from "@/components/exerciseData";
 
 export default {
   data() {
     return {
+      wname:"",
+      wdescription:"",
+      wdifficulty:"rookie",
+      wstages:[{stagename:"",exercises:[{exname:"",reps:""}]}],
       select1: "Full Body",
       items1: ["Chest", "Back", "Bicep", "Tricep", "Abs"],
-      items2: ["Very High", "High", "Moderate", "Low", "Very Low"],
+      items2: ["Very High", "High", "rookie", "Low", "Very Low"],
       step:1,
       selectedStage: 0,
       stages: [{message:"Warmup", counter: 0}, {message:"Cycle 1", counter: 0}, {message:"Cooldown", counter: 0}],
@@ -246,8 +260,23 @@ export default {
 
     updateContent(){
       this.stages[this.selectedStage].counter++
+    },
+    ...mapActions(useRoutineStore,{
+      $createRoutine: 'create'
+    }),
+
+    ...mapActions(useSecurityStore, {
+      $getCurrentUser: 'getCurrentUser',
+      $login: 'login',
+      $logout: 'logout',
+    }),
+
+    async createRoutine(){
+      const routine = new Routine(this.wname, this.wdescription,true, this.wdifficulty);
+      this.routine = await this.$createRoutine(routine);
     }
   },
+
 
   computed: {
     title() {
@@ -255,11 +284,18 @@ export default {
     },
     count(){
       return this.stages[this.selectedStage].counter
-    }
+    },
+  ...mapState(useSecurityStore, {
+    $user: state => state.user,
+  }),
+  ...mapState(useSecurityStore, {
+    $isLoggedIn: 'isLoggedIn'
+  }),
+
   },
 
   name: "createWorkout",
-  components: { FooterBar, NavBar },
+  components: { FooterBar, NavBar, ExerciseData },
 };
 </script>
 

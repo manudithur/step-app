@@ -15,8 +15,8 @@ class RoutineApi{
         return await Api.post(RoutineApi.getUrl(), true, {
             "name":`${routine.name}`,
             "detail": `${routine.detail}`,
-            "isPublic":"true",
-            "difficulty":"rookie"
+            "isPublic": true,
+            "difficulty":`${routine.difficulty}`,
         })
     }
 
