@@ -123,7 +123,7 @@
 
         </v-row>
         <v-row class="justify-center white--text">
-          <h1 class = "title-workout mb-5">Top Rated</h1>
+          <h1 class = "title-workout mb-5">Your Exercises</h1>
         </v-row>
         <v-row class="justify-center">
           <v-sheet
@@ -138,15 +138,18 @@
                 show-arrows
             >
               <v-slide-item
-                  v-for="n in 15"
-                  :key="n"
+                  v-for="e in exercises"
+                  :key="e.id"
                   v-slot="{ active, toggle }"
               >
-                <v-card
+                <ExerciseCard
                     :color="active ? 'primary' : 'grey lighten-1'"
                     class="ma-4 rounded-xl"
                     height="200"
                     width="300"
+                    :name="e.name"
+                    :detail="e.detail"
+                    :id="e.id"
                     @click="toggle"
                 >
                   <v-row
@@ -163,7 +166,7 @@
                       ></v-icon>
                     </v-scale-transition>
                   </v-row>
-                </v-card>
+                </ExerciseCard>
               </v-slide-item>
             </v-slide-group>
           </v-sheet>
@@ -201,19 +204,77 @@ p {
 
 </style>
 
+
+
 <script>
 import NavBar from '../components/NavBar.vue';
 import FooterBar from '../components/FooterBar.vue';
+import { mapState, mapActions } from "pinia"
+import { useSecurityStore } from "@/stores/SecurityStore";
+import { useExerciseStore } from "@/stores/exerciseStore";
+import ExerciseCard from "@/components/ExerciseCard";
 
 export default {
   name: 'App',
   data: () => ({
-    value:80
+    value:80,
+    controller:'',
+    exercises: undefined
   }),
 
   components: {
+    ExerciseCard,
     NavBar,
     FooterBar
+  },
+
+  async created() {
+    const securityStore = useSecurityStore();
+    await securityStore.initialize();
+    this.getAllExercises();
+  },
+
+  computed:{
+    ...mapState(useSecurityStore, {
+      $user: state => state.user,
+    }),
+    ...mapState(useSecurityStore, {
+      $isLoggedIn: 'isLoggedIn'
+    })
+  },
+
+  methods:{
+    ...mapActions(useSecurityStore, {
+      $getCurrentUser: 'getCurrentUser',
+      $login: 'login',
+      $logout: 'logout',
+    }),
+    ...mapActions(useExerciseStore, {
+      $createExercise: 'create',
+      $modifyExercise: 'modify',
+      $deleteExercise: 'delete',
+      $getExercise: 'get',
+      $getAllExercises: 'getAll'
+    }),
+
+    setResult(result){
+      this.result = JSON.stringify(result, null, 2)
+    },
+    clearResult() {
+      this.result = null
+    },
+
+    async getAllExercises() {
+      try {
+        this.controller = new AbortController()
+        const exercises = await this.$getAllExercises(this.controller);
+        this.exercises= exercises.content;
+        this.controller = null
+        this.setResult(exercises)
+      } catch(e) {
+        this.setResult(e)
+      }
+    }
   }
 
 };
