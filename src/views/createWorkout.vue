@@ -101,7 +101,7 @@
                 <v-window-item  v-for="(cycle) in cycles" :key="cycle.cycleName">
                   <v-card class="white rounded-xl pa-5 mb-15">
                     <h1 class="ma-5">{{cycles[selectedStage].cycleName}}</h1>
-                    <v-row v-for="(exercise, index) in cycles[selectedStage].exercises" :key="exercise.name">
+                    <v-row v-for="(exercise, index) in cycle.exercises" :key="index">
                       <ExerciseData class="ma-5" :reps-or-time="exercise.repsOrTime" @decreaseAmount="decreaseAmount(index)" @increaseAmount="increaseAmount(index)" @deleteElement="deleteElement(index)"></ExerciseData>
                     </v-row>
                     <v-row class="justify-center">

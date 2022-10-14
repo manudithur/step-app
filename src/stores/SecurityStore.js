@@ -21,6 +21,11 @@ export const useSecurityStore = defineStore("security", {
                 this.setToken(token);
             }
         },
+        modifyProfile(firstName, lastName){
+            this.user.firstName= firstName;
+            this.user.lastName = lastName;
+        },
+
         setUser(user) {
             this.user = user;
         },

@@ -132,7 +132,8 @@ export default {
   methods: {
     ...mapActions(useSecurityStore, {
       $getCurrentUser: 'getCurrentUser',
-      $saveEdit: 'saveEdit'
+      $saveEdit: 'saveEdit',
+      $modifyProfile: 'modifyProfile'
 
     }),
 
@@ -146,6 +147,7 @@ export default {
     async saveChanges(){
       const editable = new Editables(this.firstName, this.lastName)
       await this.$saveEdit(editable)
+      await this.$modifyProfile(this.firstName, this.lastName)
       this.edit=0;
     }
 
