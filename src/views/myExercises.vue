@@ -2,10 +2,10 @@
   <v-app>
     <NavBar/>
     <v-main class="content">
-      <v-row>
+      <v-row class="align-center">
         <v-col cols="1">
-          <router-link class="RLink" to="/home"> <!--//TODO:fijarse que este bien ruteado-->
-            <v-btn><v-icon>mdi-back</v-icon></v-btn>
+          <router-link class="RLink" to="/home">
+            <v-btn class="ml-5 mt-10"><v-icon>mdi-arrow-left</v-icon></v-btn>
           </router-link>
 
         </v-col>
@@ -65,6 +65,7 @@ export default {
   },
 
   methods :{
+
     deleteExercise(index){
       this.exercises.splice(index,1); //TODO: que esto no lo cambie solo en el array sino que lo mande a la api
     },

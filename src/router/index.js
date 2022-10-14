@@ -9,6 +9,8 @@ import Verification from '../views/verification.vue'
 import Create from '../views/createWorkout.vue'
 import Explore from '../views/explore.vue'
 import Profile from '../views/profile.vue'
+import myExercises from "@/views/myExercises";
+import myRoutines from "@/views/myRoutines";
 
 Vue.use(VueRouter)
 
@@ -21,6 +23,8 @@ const routes = [
   { path: '/create', component: Create },
   { path: '/explore', component: Explore },
   { path: '/profile', component: Profile },
+  { path: '/exercises', component: myExercises},
+  { path: '/routines', component: myRoutines},
 ]
 
 const router = new VueRouter({
