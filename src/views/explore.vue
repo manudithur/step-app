@@ -3,17 +3,6 @@
     <NavBar/>
     <v-main class="content">
       <v-container fluid class="pb-10 pt-5">
-        <v-text-field
-            filled
-            rounded
-            dense
-            solo
-            single-line
-            background-color="white"
-            prepend-inner-icon="mdi-magnify"
-            class="input"
-            label="search"
-        ></v-text-field>
         <div>
           <v-row>
             <v-col cols="3" v-for="(e) in this.exercises" :key="e.id">
