@@ -15,11 +15,16 @@
             label="search"
         ></v-text-field>
         <div>
-          <ul>
-            <li v-for="(e) in this.exercises" :key="e.id">
-              {{e.name}}
-            </li>
-          </ul>
+          <v-row>
+            <v-col cols="3" v-for="(e) in this.exercises" :key="e.id">
+              <ExerciseCard
+                  :id="e.id"
+                  :name="e.name"
+                  :detail="e.detail"
+              />
+            </v-col>
+
+          </v-row>
         </div>
       </v-container>
     </v-main>
@@ -59,6 +64,7 @@ import FooterBar from '../components/FooterBar.vue';
 import { mapState, mapActions } from "pinia"
 import { useSecurityStore } from "@/stores/SecurityStore";
 import { useExerciseStore } from "@/stores/exerciseStore";
+import ExerciseCard from "@/components/ExerciseCard";
 
 export default {
   name: 'App',
@@ -69,20 +75,15 @@ export default {
   }),
 
   components: {
+    ExerciseCard,
     NavBar,
     FooterBar
   },
 
-   created() {
-    //const securityStore = useSecurityStore();
-    //await securityStore.initialize();
-    //this.exercises = await this.getAllExercises().content;
-    //await this.getAllExercises().then((value) => {
-
-     this.getAllExercises();
-
-
-    //this.exercises= useExerciseStore().getAll().content;
+   async created() {
+    const securityStore = useSecurityStore();
+    await securityStore.initialize();
+    this.getAllExercises();
   },
 
   computed:{
