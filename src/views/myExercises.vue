@@ -4,7 +4,7 @@
     <v-main class="content">
       <v-row>
         <v-col cols="1">
-          <router-link class="RLink" to="/"> //TODO:fijarse que este bien ruteado
+          <router-link class="RLink" to="/"> <!--//TODO:fijarse que este bien ruteado-->
             <v-btn><v-icon></v-icon></v-btn>
           </router-link>
 
