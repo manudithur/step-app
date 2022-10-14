@@ -1,7 +1,4 @@
 <template>
-  <v-app>
-    <NavBar/>
-    <v-main class="content">
       <v-row class="justify-center ma-10">
         <v-col>
           <v-card class="rounded-xl centerCard pa-12">
@@ -23,9 +20,6 @@
           </v-card>
         </v-col>
       </v-row>
-    </v-main>
-    <FooterBar/>
-  </v-app>
 </template>
 
 <!-- Ojo con el important-->
@@ -51,11 +45,6 @@
   padding: 15px;
 }
 
-.content {
-  background: url(../assets/fondo.png);
-  background-size: cover;
-}
-
 .banner-text {
   font-size: 65px;
 }
@@ -71,8 +60,7 @@ import { mapState, mapActions } from "pinia";
 import {Exercise} from "../api/exercise"
 import { useExerciseStore } from "../stores/exerciseStore";
 import { useSecurityStore } from "@/stores/SecurityStore";
-import NavBar from '../components/LoginNavBar.vue';
-import FooterBar from '../components/FooterBar.vue';
+
 
 
 
@@ -117,10 +105,6 @@ export default {
     }),
   },
 
-  components: {
-    NavBar,
-    FooterBar,
-  }
 
 };
 </script>
