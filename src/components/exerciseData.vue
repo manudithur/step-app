@@ -59,6 +59,7 @@
         this.$emit('increaseAmount');
       },
 
+
       decreaseAmount() {
         this.$emit('decreaseAmount');
       },

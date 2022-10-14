@@ -24,7 +24,7 @@
                       single-line
                       dark
                       background-color="#55B8FF"
-                      v-model="wname"
+                      v-model="routine.name"
                     >Workout Name</v-text-field>
                   </v-col>
                 </v-row>
@@ -40,8 +40,8 @@
                         single-line
                         dark
                         background-color="#55B8FF"
-                        v-model="wdescription"
-                    >{{ wdescription }}</v-text-field>
+                        v-model="routine.detail"
+                    >{{ routine.detail }}</v-text-field>
                   </v-col>
                 </v-row>
                 <v-row>
@@ -56,7 +56,7 @@
                       solo
                       background-color="#55B8FF"
                       dark
-                      v-model="wdifficulty"
+                      v-model="routine.difficulty"
                     />
                   </v-col>
                 </v-row>
@@ -101,8 +101,25 @@
                 <v-window-item  v-for="(cycle) in cycles" :key="cycle.cycleName">
                   <v-card class="white rounded-xl pa-5 mb-15">
                     <h1 class="ma-5">{{cycles[selectedStage].cycleName}}</h1>
-                    <v-row v-for="(exercise, index) in cycle.exercises" :key="index">
-                      <ExerciseData class="ma-5" :reps-or-time="exercise.repsOrTime" @decreaseAmount="decreaseAmount(index)" @increaseAmount="increaseAmount(index)" @deleteElement="deleteElement(index)"></ExerciseData>
+                    <v-row v-for="(exercise, id) in cycles[selectedStage].exercises" :key="id">
+                        <v-select
+                            :items="exercises"
+                            item-text="name"
+                            label="Select exercise"
+                            v-validate="'required'"
+                            v-model="exercise"
+                            rounded
+                            single-line
+                            solo
+                            background-color="#55B8FF"
+                            dark
+                        >{{exercise}}</v-select>
+                        <v-btn-toggle></v-btn-toggle>
+                        <v-btn @click="decreaseAmount()">-</v-btn>
+                        <span class="pa-2"> {{ repsOrTime}} </span>
+                        <v-btn @click="increaseAmount()">+</v-btn>
+                        <v-btn><v-icon
+                            @click="removeElement()">mdi-delete</v-icon></v-btn>
                     </v-row>
                     <v-row class="justify-center">
                       <v-btn
@@ -227,11 +244,8 @@ import createExercise from "@/components/createExercise";
 export default {
   data() {
     return {
-      wname:"",
-      wdescription:"",
-      wdifficulty:"rookie",
+
       select1: "Full Body",
-      items1: ["Chest", "Back", "Bicep", "Tricep", "Abs"],
       items2: ["Very High", "High", "rookie", "Low", "Very Low"],
       step:1,
       selectedStage: 0,
@@ -240,7 +254,7 @@ export default {
           cycleName: "Warmup",
           exercises: [
             {
-              name: "",
+              id: "",
               repsOrTime: 1
             }
           ],
@@ -249,7 +263,7 @@ export default {
           cycleName:"Cycle 1",
           exercises: [
             {
-              name: "",
+              id: "",
               repsOrTime: 1
             }
           ],
@@ -258,12 +272,17 @@ export default {
           cycleName: "Cooldown",
           exercises: [
             {
-              name: "",
+              id: "",
               repsOrTime: 0
             }
           ],
         },
       ],
+      routine: {
+        name: "",
+        detail: "",
+        difficulty: "rookie"
+      }
     };
   },
 
@@ -273,7 +292,7 @@ export default {
     },
 
     updateContent(){
-      this.cycles[this.selectedStage].exercises.push({name:"",repsOrTime: "1"})
+      this.cycles[this.selectedStage].exercises.push({id:"",repsOrTime: "1"})
       console.log(this.cycles)
     },
 
@@ -309,6 +328,10 @@ export default {
 
     deleteElement(index){
       this.cycles[this.selectedStage].exercises.splice(index,1);
+    },
+
+    selectExercise(index){
+      this.cycles[this.selectedStage].exercises[index].name
     }
   },
 
