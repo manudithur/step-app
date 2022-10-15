@@ -1,7 +1,7 @@
 import {Api} from "./api"
 
 //en la api hay una categoria opcional de sports, por eso eligio esto
-export {RoutineApi, Routine}
+export {RoutineApi, Routine, Cycle}
 
 class RoutineApi{
 
@@ -35,6 +35,10 @@ class RoutineApi{
     static async getAll(){
         return await Api.get(RoutineApi.getUrl(),true)
     }
+
+    static async addCycle(routineId,cycle) {
+        return await Api.post(RoutineApi.getUrl(`${routineId}/cycles`), true, cycle);
+    }
 }
 
 class Routine{
@@ -45,5 +49,13 @@ class Routine{
         this.isPublic = isPublic;
         this.difficulty = difficulty;
     }
+}
 
+class Cycle{
+    constructor(name, detail, order, repetitions){
+        this.name = name;
+        this.detail = detail;
+        this.order = order;
+        this.repetitions = repetitions;
+    }
 }

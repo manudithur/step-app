@@ -43,5 +43,4 @@ class Exercise{
         this.type = type;
         this.metadata = metadata;
     }
-
 }
