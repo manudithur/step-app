@@ -27,7 +27,7 @@
               </v-col>
               <v-col cols="2"/>
               <v-col cols="1">
-                <v-btn><v-icon>mdi-pencil</v-icon></v-btn> <!-- TOOO: Hacer que el router redirija a create workout con el index el url y con un parametro que indique modify y no create   -->
+                <v-btn><v-icon>mdi-pencil</v-icon></v-btn> <!-- TODO: Hacer que el router redirija a create workout con el index el url y con un parametro que indique modify y no create   -->
               </v-col>
               <v-col cols="1"/>
               <v-col cols="1">
@@ -48,6 +48,7 @@ import NavBar from "@/components/NavBar";
 import FooterBar from "@/components/FooterBar";
 import {mapActions} from "pinia";
 import {useRoutineStore} from "@/stores/routineStore";
+import {useSecurityStore} from "@/stores/SecurityStore";
 
 
 
@@ -59,15 +60,47 @@ export default {
     }
   },
 
+  async created() {
+    const securityStore = useSecurityStore();
+    await securityStore.initialize();
+    await this.getAllRoutines();
+  },
+
   methods :{
-    deleteRoutine(index){
-      this.routines.splice(index,1); //TODO: que esto no lo cambie solo en el array sino que lo mande a la api
+    async getAllRoutines() {
+      try {
+        this.controller = new AbortController()
+        const routines = await this.$getAllRoutines(this.controller);
+        this.routines = routines.content;
+        this.controller = null
+        this.setResult(routines)
+      } catch (e) {
+        this.setResult(e)
+      }
     },
 
-    ...mapActions(useRoutineStore,{
-      $modifyRoutine: 'modify'
-    }),
+    async deleteRoutine(index) {
+      await this.$deleteRoutine(this.routines[index]);
+      this.routines.splice(index, 1);
+      console.log(this.routines)
+      console.log(index)
+
+    },
   },
+
+  ...mapActions(useRoutineStore, {
+    $createRoutine: 'create',
+    $modifyRoutine: 'modify',
+    $deleteRoutine: 'delete',
+    $getRoutine: 'get',
+    $getAllRoutines: 'getAll'
+  }),
+
+  ...mapActions(useSecurityStore, {
+    $getCurrentUser: 'getCurrentUser',
+    $login: 'login',
+    $logout: 'logout',
+  }),
 
 
   name: "myRoutines",
