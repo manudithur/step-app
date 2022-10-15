@@ -55,6 +55,7 @@ class Cycle{
     constructor(name, detail, order, repetitions){
         this.name = name;
         this.detail = detail;
+        this.type="warmup";
         this.order = order;
         this.repetitions = repetitions;
     }

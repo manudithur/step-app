@@ -11,7 +11,8 @@ class CycleExerciseApi{
     }
 
     static async add(cycleExercise, cycleId, exerciseId){
-        return await Api.post(CycleExerciseApi.getUrl(`${cycleId}/exercise/${exerciseId}`), true, cycleExercise)
+        return await Api.post(CycleExerciseApi.getUrl(`${cycleId}/exercises/${exerciseId}`), true, cycleExercise);
+
     }
 
 }

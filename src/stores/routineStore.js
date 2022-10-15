@@ -1,5 +1,6 @@
-import { defineStore } from "pinia";
-import { RoutineApi } from "@/api/routine";
+import {defineStore} from "pinia";
+import {RoutineApi} from "@/api/routine";
+import {CycleExerciseApi} from "@/api/cycleExercise";
 
 export const useRoutineStore = defineStore("routine", {
     state: () => ({
@@ -64,7 +65,11 @@ export const useRoutineStore = defineStore("routine", {
         },
 
         async addCycle(routineId, cycle){
-            await RoutineApi.addCycle(routineId,cycle);
+            return await RoutineApi.addCycle(routineId, cycle);
+        },
+        async addCycleExercise(cycleExercise, cycleId, exerciseId){
+            await CycleExerciseApi.add(cycleExercise, cycleId, exerciseId);
+
         }
     },
 });

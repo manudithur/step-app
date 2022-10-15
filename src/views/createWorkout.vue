@@ -263,7 +263,7 @@ import {mapActions, mapState} from "pinia";
 import {useSecurityStore} from "@/stores/SecurityStore";
 import {useRoutineStore} from "@/stores/routineStore";
 import {Routine, Cycle} from "@/api/routine";
-import {CycleExercise} from "@/api/cycleExercise";
+
 import createExercise from "@/components/createExercise";
 import {useExerciseStore} from "@/stores/exerciseStore";
 
@@ -345,7 +345,8 @@ export default {
 
     ...mapActions(useRoutineStore,{
       $createRoutine: 'create',
-      $addCycle : 'addCycle'
+      $addCycle : 'addCycle',
+      $addCycleExercise: 'addCycleExercise'
     }),
 
     ...mapActions(useExerciseStore,{
@@ -365,13 +366,20 @@ export default {
       const warmup = new Cycle(this.cycles[0].cycleName, this.cycles[0].cycleName, 1, this.cycles[0].repetitions);
       const cycle1 = new Cycle(this.cycles[1].cycleName, this.cycles[1].cycleName, 2 , this.cycles[1].repetitions);
       const cooldown = new Cycle(this.cycles[2].cycleName, this.cycles[2].cycleName, 3 , this.cycles[2].repetitions);
-      const c1 = await this.$addCycle(this.routine.id, warmup);
-      const c2 = await  this.$addCycle(this.routine.id, cycle1);
+      const c1=await this.$addCycle(this.routine.id, warmup);
+      const c2 =await  this.$addCycle(this.routine.id, cycle1);
       const c3 = await this.$addCycle(this.routine.id, cooldown);
 
       for(let i = 0 ; i < this.cycles[0].count ; i++){
-          const cycleE = new CycleExercise(i+1 , this.cycles[0].exercises[i].repsOrTime, this.cycles[0].exercises[i].repsOrTime)
 
+        await this.$addCycleExercise({"order":i+1,"duration":this.cycles[0].exercises[i].repsOrTime,"repetitions":this.cycles[0].exercises[i].repsOrTime},c1.id, this.cycles[0].exercises[i].id);
+      }
+      for(let i = 0 ; i < this.cycles[1].count ; i++){
+
+        await this.$addCycleExercise({"order":i+1,"duration":this.cycles[1].exercises[i].repsOrTime,"repetitions":this.cycles[1].exercises[i].repsOrTime},c2.id, this.cycles[1].exercises[i].id);
+      }
+      for(let i = 0 ; i < this.cycles[2].count ; i++){
+        await this.$addCycleExercise({"order":i+1,"duration":this.cycles[2].exercises[i].repsOrTime,"repetitions":this.cycles[2].exercises[i].repsOrTime},c3.id, this.cycles[2].exercises[i].id);
       }
     },
 
@@ -398,7 +406,7 @@ export default {
     },
 
     getName(id){
-      return this.exercises.find(o => o.id == id);
+      return this.exercises.find(o => o.id === id);
       //return JSON.parse(obj, null, 2);
     },
 
