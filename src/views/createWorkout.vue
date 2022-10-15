@@ -107,7 +107,7 @@
                             item-text="name"
                             label="Select exercise"
                             v-validate="'required'"
-                            v-model="exercise"
+                            :v-model="exercise"
                             rounded
                             single-line
                             solo
@@ -237,8 +237,6 @@ import {mapActions, mapState} from "pinia";
 import {useSecurityStore} from "@/stores/SecurityStore";
 import {useRoutineStore} from "@/stores/routineStore";
 import {Routine} from "@/api/routine";
-import ExerciseData from "@/components/exerciseData";
-
 import createExercise from "@/components/createExercise";
 
 export default {
@@ -350,7 +348,7 @@ export default {
   },
 
   name: "createWorkout",
-  components: { FooterBar, NavBar, ExerciseData, createExercise },
+  components: { FooterBar, NavBar, createExercise },
 };
 </script>
 
