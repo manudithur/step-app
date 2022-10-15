@@ -101,25 +101,28 @@
                 <v-window-item  v-for="(cycle) in cycles" :key="cycle.cycleName">
                   <v-card class="white rounded-xl pa-5 mb-15">
                     <h1 class="ma-5">{{cycles[selectedStage].cycleName}}</h1>
-                    <v-row v-for="(exercise, id) in cycles[selectedStage].exercises" :key="id">
-                        <v-select
-                            :items="exercises"
-                            item-text="name"
-                            label="Select exercise"
-                            v-validate="'required'"
-                            v-model="exercise"
-                            rounded
-                            single-line
-                            solo
-                            background-color="#55B8FF"
-                            dark
-                        >{{exercise}}</v-select>
-                        <v-btn-toggle></v-btn-toggle>
-                        <v-btn @click="decreaseAmount()">-</v-btn>
-                        <span class="pa-2"> {{ repsOrTime}} </span>
-                        <v-btn @click="increaseAmount()">+</v-btn>
-                        <v-btn><v-icon
-                            @click="removeElement()">mdi-delete</v-icon></v-btn>
+                    <v-row v-for="(n,index) in cycles[selectedStage].count" :key="n">
+                      <v-select
+                          :items="exercises"
+                          item-text="name"
+                          item-value="id"
+                          label="Select exercise"
+                          v-validate="'required'"
+                          v-model="cycles[selectedStage].exercises[index].id"
+                          rounded
+                          single-line
+                          solo
+                          background-color="#55B8FF"
+                          dark
+                      ></v-select>
+                      <v-btn-toggle></v-btn-toggle>
+                      <v-btn @click="decreaseAmount(index)">-</v-btn>
+
+                      <p class="pa-2"> {{ cycles[selectedStage].exercises[index].repsOrTime}} </p>
+
+                      <v-btn @click="increaseAmount(index)">+</v-btn>
+                      <v-btn><v-icon
+                          @click="deleteElement(index)">mdi-delete</v-icon></v-btn>
                     </v-row>
                     <v-row class="justify-center">
                       <v-btn
@@ -131,6 +134,7 @@
                   </v-card>
                 </v-window-item>
               </v-window>
+
             </v-col>
           </v-row>
         </v-window-item>
@@ -142,19 +146,38 @@
                 <h1>Create a new Workout:</h1>
                 <h3 class="mt-6">Step 3: Review Workout</h3>
               </v-container>
+
               <v-card class = "white rounded-xl pa-5">
-                <v-container v-for="(cycle, cycleIndex) in cycles" :key="cycle.cycleName">
+                <div v-for="(cycle) in cycles"
+                     :key="cycle">
                   <v-row>
-                    <h2 class="onWhite ma-4">{{cycle.cycleName}}</h2>
+                    <h2>{{cycle.cycleName}}</h2>
                   </v-row>
-                  <p>{{cycle.exercises}}</p>
-                  <WorkoutReview v-for="(item, index) in cycle.exercises" :key="item" :workout-name="item.name" :repsOrTime="item.repsOrTime" @myEvent="kill(index, cycleIndex)"></WorkoutReview>
-                </v-container>
+
+                  <div v-for="exercise in cycle.exercises" :key="exercise">
+                    <v-row>
+                      <v-col>
+                        <p class ="text-center mt-3"> {{exercise.id}}</p>
+                      </v-col>
+                      <v-col>
+                        <p class=" text-center mt-3">{{exercise.repsOrTime}}</p>
+                      </v-col>
+                    </v-row>
+                  </div>
+                </div>
+                    <v-col cols="2" >
+                      <v-btn @click="close()" icon class="mt-2 ml-4">
+                        <v-icon>
+                          mdi-delete
+                        </v-icon>
+                      </v-btn>
+                    </v-col>
+
               </v-card>
             </v-col>
           </v-row>
         </v-window-item>
-        </v-window>
+      </v-window>
       <v-row class="mb-16">
         <v-col cols="2" />
         <v-col cols="1">
@@ -237,9 +260,9 @@ import {mapActions, mapState} from "pinia";
 import {useSecurityStore} from "@/stores/SecurityStore";
 import {useRoutineStore} from "@/stores/routineStore";
 import {Routine} from "@/api/routine";
-import ExerciseData from "@/components/exerciseData";
 
 import createExercise from "@/components/createExercise";
+import {useExerciseStore} from "@/stores/exerciseStore";
 
 export default {
   data() {
@@ -252,6 +275,7 @@ export default {
       cycles:[
         {
           cycleName: "Warmup",
+          count:1,
           exercises: [
             {
               id: "",
@@ -261,6 +285,7 @@ export default {
         },
         {
           cycleName:"Cycle 1",
+          count:1,
           exercises: [
             {
               id: "",
@@ -270,10 +295,11 @@ export default {
         },
         {
           cycleName: "Cooldown",
+          count:1,
           exercises: [
             {
               id: "",
-              repsOrTime: 0
+              repsOrTime: 1
             }
           ],
         },
@@ -282,8 +308,16 @@ export default {
         name: "",
         detail: "",
         difficulty: "rookie"
-      }
+      },
+      exercises: null
     };
+  },
+
+  async created(){
+    const securityStore = useSecurityStore();
+    await securityStore.initialize();
+    await this.$getCurrentUser();
+    await this.getAllExercises()
   },
 
   methods: {
@@ -292,14 +326,18 @@ export default {
     },
 
     updateContent(){
-      this.cycles[this.selectedStage].exercises.push({id:"",repsOrTime: "1"})
+      this.cycles[this.selectedStage].exercises.push({id:"",repsOrTime: 1})
+      this.cycles[this.selectedStage].count++
       console.log(this.cycles)
     },
 
 
-
     ...mapActions(useRoutineStore,{
-      $createRoutine: 'create'
+      $createRoutine: 'create',
+    }),
+
+    ...mapActions(useExerciseStore,{
+      $getAllExercises: 'getAll'
     }),
 
     ...mapActions(useSecurityStore, {
@@ -328,10 +366,24 @@ export default {
 
     deleteElement(index){
       this.cycles[this.selectedStage].exercises.splice(index,1);
+      this.cycles[this.selectedStage].count--;
     },
 
     selectExercise(index){
       this.cycles[this.selectedStage].exercises[index].name
+    },
+    
+
+    async getAllExercises(){
+      try {
+        this.controller = new AbortController()
+        const exercises = await this.$getAllExercises(this.controller);
+        this.exercises= exercises.content;
+        this.controller = null
+        this.setResult(exercises)
+      } catch(e) {
+        this.setResult(e)
+      }
     }
   },
 
@@ -350,7 +402,7 @@ export default {
   },
 
   name: "createWorkout",
-  components: { FooterBar, NavBar, ExerciseData, createExercise },
+  components: { FooterBar, NavBar, createExercise },
 };
 </script>
 
