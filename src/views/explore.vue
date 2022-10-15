@@ -87,7 +87,7 @@ export default {
    async created() {
     const securityStore = useSecurityStore();
     await securityStore.initialize();
-    this.getAllExercises();
+    await this.getAllExercises();
   },
 
   computed:{

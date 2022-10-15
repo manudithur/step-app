@@ -55,11 +55,7 @@ import {useRoutineStore} from "@/stores/routineStore";
 export default {
   data() {
     return {
-      routines: [
-        {
-          name: "Chest Pump",
-        }
-      ] //fetch exercises TODO: que haga fetch de la api y acomodar los capos que muestra
+      routines: undefined //fetch exercises TODO: que haga fetch de la api y acomodar los capos que muestra
     }
   },
 
@@ -67,6 +63,7 @@ export default {
     deleteRoutine(index){
       this.routines.splice(index,1); //TODO: que esto no lo cambie solo en el array sino que lo mande a la api
     },
+
     ...mapActions(useRoutineStore,{
       $modifyRoutine: 'modify'
     }),
