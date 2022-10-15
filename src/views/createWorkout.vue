@@ -157,6 +157,9 @@
                   <div v-for="exercise in cycle.exercises" :key="exercise">
                     <v-row>
                       <v-col>
+                        <p>{{getName(exercise.id)}}</p>
+                      </v-col>
+                      <v-col>
                         <p class ="text-center mt-3"> {{exercise.id}}</p>
                       </v-col>
                       <v-col>
@@ -186,7 +189,7 @@
         <v-col cols="6"/>
         <v-col cols="1">
           <v-btn v-if="step !== 3" rounded elevation="5" class="pa-7 mb-16 mt-10 next" width="100%" @click="step++">Next</v-btn>
-          <v-btn v-if="step === 3" rounded elevation="5" class="pa-7 mb-16 mt-10 next" width="100%" @click="createRoutine">Finish</v-btn>
+          <v-btn v-if="step === 3" rounded elevation="5" class="pa-7 mb-16 mt-10 next" width="100%" @click="finish">Finish</v-btn>
         </v-col>
       </v-row>
       <createExercise/>
@@ -259,8 +262,8 @@ import FooterBar from "@/components/FooterBar";
 import {mapActions, mapState} from "pinia";
 import {useSecurityStore} from "@/stores/SecurityStore";
 import {useRoutineStore} from "@/stores/routineStore";
-import {Routine} from "@/api/routine";
-
+import {Routine, Cycle} from "@/api/routine";
+import {CycleExercise} from "@/api/cycleExercise";
 import createExercise from "@/components/createExercise";
 import {useExerciseStore} from "@/stores/exerciseStore";
 
@@ -276,9 +279,11 @@ export default {
         {
           cycleName: "Warmup",
           count:1,
+          repetitions: 1,
           exercises: [
             {
               id: "",
+              name:"",
               repsOrTime: 1
             }
           ],
@@ -286,9 +291,11 @@ export default {
         {
           cycleName:"Cycle 1",
           count:1,
+          repetitions: 1,
           exercises: [
             {
               id: "",
+              name:"",
               repsOrTime: 1
             }
           ],
@@ -296,9 +303,11 @@ export default {
         {
           cycleName: "Cooldown",
           count:1,
+          repetitions: 1,
           exercises: [
             {
               id: "",
+              name:"",
               repsOrTime: 1
             }
           ],
@@ -307,6 +316,7 @@ export default {
       routine: {
         name: "",
         detail: "",
+        isPublic:"true",
         difficulty: "rookie"
       },
       exercises: null
@@ -318,6 +328,7 @@ export default {
     await securityStore.initialize();
     await this.$getCurrentUser();
     await this.getAllExercises()
+
   },
 
   methods: {
@@ -326,7 +337,7 @@ export default {
     },
 
     updateContent(){
-      this.cycles[this.selectedStage].exercises.push({id:"",repsOrTime: 1})
+      this.cycles[this.selectedStage].exercises.push({id:"",name:"",repsOrTime: 1})
       this.cycles[this.selectedStage].count++
       console.log(this.cycles)
     },
@@ -334,10 +345,12 @@ export default {
 
     ...mapActions(useRoutineStore,{
       $createRoutine: 'create',
+      $addCycle : 'addCycle'
     }),
 
     ...mapActions(useExerciseStore,{
-      $getAllExercises: 'getAll'
+      $getAllExercises: 'getAll',
+
     }),
 
     ...mapActions(useSecurityStore, {
@@ -346,9 +359,20 @@ export default {
       $logout: 'logout',
     }),
 
-    async createRoutine(){
-      const routine = new Routine(this.wname, this.wdescription,true, this.wdifficulty);
-      this.routine = await this.$createRoutine(routine);
+    async finish(){
+      const myRoutine = new Routine(this.routine.name, this.routine.detail,this.routine.isPublic, this.routine.difficulty);
+      this.routine = await this.$createRoutine(myRoutine);
+      const warmup = new Cycle(this.cycles[0].cycleName, this.cycles[0].cycleName, 1, this.cycles[0].repetitions);
+      const cycle1 = new Cycle(this.cycles[1].cycleName, this.cycles[1].cycleName, 2 , this.cycles[1].repetitions);
+      const cooldown = new Cycle(this.cycles[2].cycleName, this.cycles[2].cycleName, 3 , this.cycles[2].repetitions);
+      const c1 = await this.$addCycle(this.routine.id, warmup);
+      const c2 = await  this.$addCycle(this.routine.id, cycle1);
+      const c3 = await this.$addCycle(this.routine.id, cooldown);
+
+      for(let i = 0 ; i < this.cycles[0].count ; i++){
+          const cycleE = new CycleExercise(i+1 , this.cycles[0].exercises[i].repsOrTime, this.cycles[0].exercises[i].repsOrTime)
+
+      }
     },
 
     kill(index, cycleIndex){
@@ -372,7 +396,11 @@ export default {
     selectExercise(index){
       this.cycles[this.selectedStage].exercises[index].name
     },
-    
+
+    getName(id){
+      return this.exercises.find(o => o.id == id);
+      //return JSON.parse(obj, null, 2);
+    },
 
     async getAllExercises(){
       try {
@@ -400,6 +428,8 @@ export default {
   }),
 
   },
+
+
 
   name: "createWorkout",
   components: { FooterBar, NavBar, createExercise },
