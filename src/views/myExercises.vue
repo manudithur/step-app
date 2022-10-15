@@ -17,12 +17,14 @@
         <v-col cols="1"/>
         <v-col cols="10">
           <v-card class="rounded-xl">
-            <v-row class="align-center ma-3" v-for="(exercise, index) in exercises" :key=exercise.name>
+            <v-row class="align-center ma-3" v-for="(exercise, index) in exercises" :key=exercise.id>
               <v-col cols="1"/>
               <v-col cols="4">
                 <li>
                   <h4 v-if="editMode !== index">{{exercises[index].name}}</h4>
-                  <v-text-field  v-else-if="editMode === index" v-model="exercises[index].name">{{exercises[index].name}}</v-text-field>
+                  <h6 v-if="editMode !== index">{{exercises[index].detail}}</h6>
+                  <v-text-field  v-if="editMode === index" v-model="exercises[index].name">{{exercises[index].name}}</v-text-field>
+                  <v-text-field  v-if="editMode === index" v-model="exercises[index].detail">{{exercises[index].detail}}</v-text-field>
                 </li>
 
               </v-col>
@@ -47,6 +49,9 @@
 <script>
 import NavBar from "@/components/NavBar";
 import FooterBar from "@/components/FooterBar";
+import {mapActions, mapState} from "pinia";
+import {useExerciseStore} from "@/stores/exerciseStore";
+import {useSecurityStore} from "@/stores/SecurityStore";
 
 
 
@@ -54,33 +59,93 @@ import FooterBar from "@/components/FooterBar";
 export default {
   data() {
     return {
-      exercises: [
-        {
-          name: "Chest Pump",
-          repsOrTime:5
-        }
-      ], //fetch exercises TODO: que haga fetch de la api
+      exercises: undefined, //fetch exercises TODO: que haga fetch de la api
       editMode: -1,
     }
   },
 
-  methods :{
+  computed: {
+    ...mapState(useSecurityStore, {
+      $user: state => state.user,
+    }),
+    ...mapState(useSecurityStore, {
+      $isLoggedIn: 'isLoggedIn'
+    }),
+  },
 
-    deleteExercise(index){
-      this.exercises.splice(index,1); //TODO: que esto no lo cambie solo en el array sino que lo mande a la api
-    },
-    editExercise(index){
-      if (this.editMode === -1 || index !== this.editMode)
-        this.editMode=index;
-      else if (index === this.editMode){
-        this.editMode = -1;
-      }
-    }
+  async created() {
+    const securityStore = useSecurityStore();
+    await securityStore.initialize();
+    await this.getAllExercises();
   },
 
 
+  methods: {
+    ...mapActions(useSecurityStore, {
+      $getCurrentUser: 'getCurrentUser',
+      $login: 'login',
+      $logout: 'logout',
+    }),
+    ...mapActions(useExerciseStore, {
+      $createExercise: 'create',
+      $modifyExercise: 'modify',
+      $deleteExercise: 'delete',
+      $getExercise: 'get',
+      $getAllExercises: 'getAll'
+    }),
+
+
+    async getAllExercises() {
+      try {
+        this.controller = new AbortController()
+        const exercises = await this.$getAllExercises(this.controller);
+        this.exercises = exercises.content;
+        this.controller = null
+        this.setResult(exercises)
+      } catch (e) {
+        this.setResult(e)
+      }
+    },
+
+    async deleteExercise(index) {
+      await this.$deleteExercise(this.exercises[index]);
+      this.exercises.splice(index, 1);
+      console.log(this.exercises)
+      console.log(index)
+
+    },
+
+    async editExercise(index) {
+      if (this.editMode === -1)
+        this.editMode = index;
+      else if (index === this.editMode) {
+        this.editMode = -1;
+        await this.$modifyExercise(this.exercises[index], {
+          "name": "HOLA",
+          "detail": "HOLA",
+          "type": "exercise",
+          "metadata": null
+        });
+      }
+    },
+  },
+
+  ...mapActions(useExerciseStore, {
+    $createExercise: 'create',
+    $modifyExercise: 'modify',
+    $deleteExercise: 'delete',
+    $getExercise: 'get',
+    $getAllExercises: 'getAll'
+  }),
+
+  ...mapActions(useSecurityStore, {
+    $getCurrentUser: 'getCurrentUser',
+    $login: 'login',
+    $logout: 'logout',
+  }),
+
   name: "myExercises",
-  components: {FooterBar,NavBar}
+  components: {FooterBar,NavBar},
 }
 </script>
 
