@@ -59,7 +59,7 @@ import {useSecurityStore} from "@/stores/SecurityStore";
 export default {
   data() {
     return {
-      exercises: undefined, //fetch exercises TODO: que haga fetch de la api
+      exercises: undefined,
       editMode: -1,
     }
   },
