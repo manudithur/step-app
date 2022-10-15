@@ -101,7 +101,6 @@
                 <v-window-item  v-for="(cycle) in cycles" :key="cycle.cycleName">
                   <v-card class="white rounded-xl pa-5 mb-15">
                     <h1 class="ma-5">{{cycles[selectedStage].cycleName}}</h1>
-<<<<<<< HEAD
                     <v-row v-for="(n,index) in cycles[selectedStage].count" :key="n">
                       <v-select
                           :items="exercises"
@@ -124,27 +123,6 @@
                       <v-btn @click="increaseAmount(index)">+</v-btn>
                       <v-btn><v-icon
                           @click="deleteElement(index)">mdi-delete</v-icon></v-btn>
-=======
-                    <v-row v-for="(exercise, id) in cycles[selectedStage].exercises" :key="id">
-                        <v-select
-                            :items="exercises"
-                            item-text="name"
-                            label="Select exercise"
-                            v-validate="'required'"
-                            :v-model="exercise"
-                            rounded
-                            single-line
-                            solo
-                            background-color="#55B8FF"
-                            dark
-                        >{{exercise}}</v-select>
-                        <v-btn-toggle></v-btn-toggle>
-                        <v-btn @click="decreaseAmount()">-</v-btn>
-                        <span class="pa-2"> {{ repsOrTime}} </span>
-                        <v-btn @click="increaseAmount()">+</v-btn>
-                        <v-btn><v-icon
-                            @click="removeElement()">mdi-delete</v-icon></v-btn>
->>>>>>> 77be5ee0c5ef4289996276452cca614e0496946b
                     </v-row>
                     <v-row class="justify-center">
                       <v-btn
@@ -282,10 +260,7 @@ import {mapActions, mapState} from "pinia";
 import {useSecurityStore} from "@/stores/SecurityStore";
 import {useRoutineStore} from "@/stores/routineStore";
 import {Routine} from "@/api/routine";
-<<<<<<< HEAD
 
-=======
->>>>>>> 77be5ee0c5ef4289996276452cca614e0496946b
 import createExercise from "@/components/createExercise";
 import {useExerciseStore} from "@/stores/exerciseStore";
 
