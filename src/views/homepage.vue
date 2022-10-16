@@ -7,19 +7,11 @@
           <v-col cols="4" class="pt-10" >
             <v-container class="white--text pt-15">
               <v-row>
-              <h1 class="banner-text">Just keep going with your weekly objective!</h1>
+              <h1 class="banner-text">Just keep going! Dont give up!</h1>
               <p >We become better every day, step by step.</p>
               <v-row class="pb-3">
               </v-row>
-                <v-progress-linear
-                  :value=value
-                  height="25"
-                  background-color="white"
-                  color="green lighten-1"
-                  class="rounded-pill"
-              >
-                  {{value}}%
-                </v-progress-linear>
+
               </v-row>
               <v-row class="pt-4">
                 <v-btn x-large elevation="4" class="buttonHome rounded-lg white">
@@ -102,13 +94,6 @@
               <v-slide-item
                   v-for="(e) in routines" :key="e.id"
               >
-<!--                <v-card-->
-<!--                    :color="active ? 'primary' : 'grey lighten-1'"-->
-<!--                    class="ma-4 rounded-xl"-->
-<!--                    height="200"-->
-<!--                    width="300"-->
-<!--                    @click="toggle"-->
-<!--                >-->
                   <router-link class="RLink" :to="`/edit/${e.id -1}`"><RoutineCard :id="e.id"
                                :name="e.name"
                                :detail="e.detail"
