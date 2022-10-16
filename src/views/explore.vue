@@ -91,7 +91,7 @@ export default {
     if(!securityStore.isLoggedIn){
       router.push('/login')
     }
-    await this.getAllExercises();
+    await this.getAllRoutines();
   },
 
   computed:{

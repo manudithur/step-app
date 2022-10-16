@@ -156,15 +156,7 @@
 
                   <div v-for="exercise in cycle.exercises" :key="exercise">
                     <v-row>
-                      <v-col>
-                        <p>{{getName(exercise.id)}}</p>
-                      </v-col>
-                      <v-col>
-                        <p class ="text-center mt-3"> {{exercise.id}}</p>
-                      </v-col>
-                      <v-col>
-                        <p class=" text-center mt-3">{{exercise.repsOrTime}}</p>
-                      </v-col>
+                      <ExercisePill :name="getName(exercise.id)" :repetitions="exercise.repsOrTime"/>
                     </v-row>
                   </div>
                 </div>
@@ -263,7 +255,7 @@ import {mapActions, mapState} from "pinia";
 import {useSecurityStore} from "@/stores/SecurityStore";
 import {useRoutineStore} from "@/stores/routineStore";
 import {Routine, Cycle} from "@/api/routine";
-
+import ExercisePill from "@/components/exercisePill"
 import createExercise from "@/components/createExercise";
 import {useExerciseStore} from "@/stores/exerciseStore";
 
@@ -351,7 +343,6 @@ export default {
 
     ...mapActions(useExerciseStore,{
       $getAllExercises: 'getAll',
-
     }),
 
     ...mapActions(useSecurityStore, {
@@ -406,7 +397,7 @@ export default {
     },
 
     getName(id){
-      return this.exercises.find(o => o.id === id);
+     return this.exercises.find(o => o.id === id);
       //return JSON.parse(obj, null, 2);
     },
 
@@ -440,7 +431,7 @@ export default {
 
 
   name: "createWorkout",
-  components: { FooterBar, NavBar, createExercise },
+  components: { FooterBar, NavBar, createExercise, ExercisePill },
 };
 </script>
 
