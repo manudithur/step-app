@@ -99,24 +99,28 @@
                     <v-row class="mt-5" v-for="(n,index) in cycles[selectedStage].count" :key="n">
                       <v-select
                           :items="exercises"
+                          return-object
+                          v-model="selectedExercise"
                           item-text="name"
                           item-value="id"
                           label="Select exercise"
-                          v-validate="'required'"
-                          v-model="cycles[selectedStage].exercises[index].id"
                           rounded
                           single-line
                           solo
                           background-color="#55B8FF"
                           dark
+                          v-on:input="updateInfo(selectedExercise,index)"
                       ></v-select>
                       <v-btn-toggle></v-btn-toggle>
+
                       <v-btn @click="decreaseAmount(index)" class="rounded-pill mx-3 mt-1">-</v-btn>
 
                       <h2 class="pa-2 "> {{ cycles[selectedStage].exercises[index].repsOrTime}} </h2>
 
                       <v-btn @click="increaseAmount(index)" class="rounded-pill mx-3 mt-1">+</v-btn>
                       <v-icon class="mt-n9" @click="deleteElement(index)">mdi-delete</v-icon>
+
+
                     </v-row>
                     <v-row class="justify-center">
                       <v-btn
@@ -124,7 +128,9 @@
                           class="addButton rounded-pill"
                           large
                       >+</v-btn>
+
                     </v-row>
+
                   </v-card>
                 </v-window-item>
               </v-window>
@@ -150,7 +156,7 @@
 
                   <div v-for="exercise in cycle.exercises" :key="exercise">
                     <v-row>
-                      <ExercisePill :name="getName(exercise.id)" :repetitions="exercise.repsOrTime"/>
+                      <ExercisePill :name="exercise.name" :repetitions="exercise.repsOrTime"/>
                     </v-row>
                   </div>
                 </div>
@@ -263,38 +269,23 @@ export default {
       cycles:[
         {
           cycleName: "Warmup",
-          count:1,
+          count:0,
           repetitions: 1,
           exercises: [
-            {
-              id: "",
-              name:"",
-              repsOrTime: 1
-            }
+
           ],
         },
         {
           cycleName:"Cycle 1",
-          count:1,
+          count:0,
           repetitions: 1,
-          exercises: [
-            {
-              id: "",
-              name:"",
-              repsOrTime: 1
-            }
-          ],
+          exercises: [],
         },
         {
           cycleName: "Cooldown",
-          count:1,
+          count:0,
           repetitions: 1,
           exercises: [
-            {
-              id: "",
-              name:"",
-              repsOrTime: 1
-            }
           ],
         },
       ],
@@ -304,7 +295,8 @@ export default {
         isPublic:"true",
         difficulty: "rookie"
       },
-      exercises: null,
+      exercises: undefined,
+      selectedExercise:undefined
     }
   },
 
@@ -317,6 +309,13 @@ export default {
   },
 
   methods: {
+    updateInfo(exercise, index){
+      console.log(exercise);
+      console.log(exercise.name);
+      this.cycles[this.selectedStage].exercises[index].name = exercise.name;
+      this.cycles[this.selectedStage].exercises[index].id = exercise.id;
+    },
+
     updateStage(index) {
       this.selectedStage = index;
     },

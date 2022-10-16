@@ -13,15 +13,15 @@
               </v-container>
 
               <v-card class = "white rounded-xl pa-5">
-                <div v-for="(cycle) in cycles"
+                <div v-for="(cycle, index) in cycles"
                      :key="cycle.id">
                   <v-row>
                     <h2>{{cycle.name}}</h2>
                   </v-row>
 
-                  <div v-for="exercise in cycleExercises" :key="exercise">
+                  <div v-for="exercise in cycleExercises[index]" :key="exercise">
                     <v-row>
-                      <ExercisePill :name="getName(exercise)" :repetitions="exercise.repetitions"/>
+                      <ExercisePill :name="exercise.exercise.name" :repetitions="exercise.repetitions"/>
                     </v-row>
                   </div>
                 </div>
