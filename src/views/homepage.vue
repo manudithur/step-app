@@ -122,7 +122,7 @@
               <v-slide-item
                   v-for="(e) in exercises" :key="e.id"
               >
-                <router-link class="RLink" :to="`/edit/${e.id -1}`"><ExerciseCard
+                <router-link class="RLink" :to="`/exercises`"><ExerciseCard
                                                                    :name="e.name"
                                                                    :detail="e.detail"
                                                                    :difficulty="e.difficulty"
