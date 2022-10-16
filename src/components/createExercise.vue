@@ -92,6 +92,7 @@ export default {
     async createExercise(){
       const exercise = new Exercise(this.name, this.name, "exercise",null);
         this.exercise = await this.$createExercise(exercise);
+        this.$emit("createdExercise");
     }
 
   },
@@ -105,6 +106,7 @@ export default {
     }),
   },
 
+  emits:["createdExercise"]
 
 };
 </script>

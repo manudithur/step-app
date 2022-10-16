@@ -192,7 +192,7 @@
           <v-btn v-if="step === 3" rounded elevation="5" class="pa-7 mb-16 mt-10 next" width="100%" @click="finish">Finish</v-btn>
         </v-col>
       </v-row>
-      <createExercise/>
+      <createExercise @createdExercise="getAllExercises"/>
     </v-main>
     <FooterBar />
   </v-app>
