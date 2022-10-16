@@ -21,7 +21,7 @@
             <v-card class="white rounded-xl pa-5">
               <v-col cols="200">
                   <v-row class="justify-center text-center pa-5">
-                    <h1>Top Rated Workouts</h1>
+                    <h1>Suggested by STEP</h1>
                   </v-row>
                   <v-row>
                     <v-col cols="100">

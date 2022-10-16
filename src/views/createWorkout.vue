@@ -18,7 +18,7 @@
                   </v-col>
                   <v-col cols="6">
                     <v-text-field
-                      class="mt-4 inputField"
+                      class="mt-4"
                       solo
                       rounded
                       single-line
@@ -34,7 +34,7 @@
                   </v-col>
                   <v-col cols="6">
                     <v-text-field
-                        class="mt-4 inputField"
+                        class="mt-4"
                         solo
                         rounded
                         single-line
@@ -58,19 +58,6 @@
                       dark
                       v-model="routine.difficulty"
                     />
-                  </v-col>
-                </v-row>
-                <v-row>
-                  <v-col cols="4" class="text-center">
-                    <h5 class="onWhite mt-2">Cover Image</h5>
-                  </v-col>
-                  <v-col cols="6">
-                      <v-btn
-                        class="mb-4 py-6 white--text"
-                        block
-                        color="#55B8FF"
-                        rounded
-                      ><input type="file" hidden> Attach Image</v-btn>
                   </v-col>
                 </v-row>
               </v-card>
@@ -99,9 +86,9 @@
 
               <v-window>
                 <v-window-item  v-for="(cycle) in cycles" :key="cycle.cycleName">
-                  <v-card class="white rounded-xl pa-5 mb-15">
-                    <h1 class="ma-5">{{cycles[selectedStage].cycleName}}</h1>
-                    <v-row v-for="(n,index) in cycles[selectedStage].count" :key="n">
+                  <v-card class="white rounded-xl pa-8 mb-15">
+                    <h1 class="mb-5">{{cycles[selectedStage].cycleName}}</h1>
+                    <v-row class="mt-5" v-for="(n,index) in cycles[selectedStage].count" :key="n">
                       <v-select
                           :items="exercises"
                           item-text="name"
@@ -116,19 +103,18 @@
                           dark
                       ></v-select>
                       <v-btn-toggle></v-btn-toggle>
-                      <v-btn @click="decreaseAmount(index)">-</v-btn>
+                      <v-btn @click="decreaseAmount(index)" class="rounded-pill mx-3 mt-1">-</v-btn>
 
-                      <p class="pa-2"> {{ cycles[selectedStage].exercises[index].repsOrTime}} </p>
+                      <h2 class="pa-2 "> {{ cycles[selectedStage].exercises[index].repsOrTime}} </h2>
 
-                      <v-btn @click="increaseAmount(index)">+</v-btn>
-                      <v-btn><v-icon
-                          @click="deleteElement(index)">mdi-delete</v-icon></v-btn>
+                      <v-btn @click="increaseAmount(index)" class="rounded-pill mx-3 mt-1">+</v-btn>
+                      <v-icon class="mt-n9" @click="deleteElement(index)">mdi-delete</v-icon>
                     </v-row>
                     <v-row class="justify-center">
                       <v-btn
                           @click="updateContent()"
-                          class="addButton"
-                          small
+                          class="addButton rounded-pill"
+                          large
                       >+</v-btn>
                     </v-row>
                   </v-card>
@@ -191,10 +177,6 @@
 </template>
 
 <style scoped>
-
-  .inputField >>> input{
-    text-align: center;
-  }
 
   .v-select__selection {
     width: 100%;
@@ -264,7 +246,7 @@ export default {
     return {
 
       select1: "Full Body",
-      items2: ["Very High", "High", "rookie", "Low", "Very Low"],
+      items2: ['rookie', 'beginner', 'intermediate', 'advanced', 'expert'],
       step:1,
       selectedStage: 0,
       cycles:[
@@ -311,8 +293,8 @@ export default {
         isPublic:"true",
         difficulty: "rookie"
       },
-      exercises: null
-    };
+      exercises: null,
+    }
   },
 
   async created(){
@@ -334,7 +316,6 @@ export default {
       console.log(this.cycles)
     },
 
-
     ...mapActions(useRoutineStore,{
       $createRoutine: 'create',
       $addCycle : 'addCycle',
@@ -352,7 +333,9 @@ export default {
     }),
 
     async finish(){
-      const myRoutine = new Routine(this.routine.name, this.routine.detail,this.routine.isPublic, this.routine.difficulty);
+      let metadata = {img: this.imageUrl}
+      const myRoutine = new Routine(this.routine.name, this.routine.detail, this.routine.isPublic, this.routine.difficulty, JSON.stringify(metadata));
+      console.log("Metadata de mi rutina: " + myRoutine.metadata);
       this.routine = await this.$createRoutine(myRoutine);
       const warmup = new Cycle(this.cycles[0].cycleName, this.cycles[0].cycleName, 1, this.cycles[0].repetitions,"warmup");
       const cycle1 = new Cycle(this.cycles[1].cycleName, this.cycles[1].cycleName, 2 , this.cycles[1].repetitions,"cycle");

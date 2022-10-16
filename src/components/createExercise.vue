@@ -1,7 +1,7 @@
 <template>
       <v-row class="justify-center ma-10">
         <v-col>
-          <v-card class="rounded-xl centerCard pa-12">
+          <v-card class="rounded-xl centerCard pa-12" max-width="800px">
             <h1 class="onGrey text-center pb-5">Create Exercise</h1>
             <v-row class="justify-center py-5">
               <v-col cols="8">
@@ -11,6 +11,17 @@
                     label="Exercise Name"
                     v-model="name"
                 >{{name}}</v-text-field>
+                <p v-if="errorFlag" class="red--text" >{{errorMsg}}</p>
+                <v-file-input 
+                  v-model="file"
+                  outlined
+                  :disabled="edit==0"
+                  @change="updateImg"
+                  prepend-icon=""
+                  show-size
+                  append-icon="mdi-upload" 
+                  label="Upload new avatar"></v-file-input>
+                  <v-btn @click="test"></v-btn>
               </v-col>
             </v-row>
             <v-row class="justify-center">
@@ -68,7 +79,11 @@ export default {
   name: 'App',
   data() {
     return {
-      name:""
+      name:"",
+      file: null,
+      imageUrl: '',
+      errorFlag: false,
+      errorMsg: " "
     }
   },
 
@@ -80,7 +95,8 @@ export default {
 
   methods: {
     ...mapActions(useExerciseStore,{
-      $createExercise: 'create'
+      $createExercise: 'create',
+      $addImg: 'addImg'
     }),
 
     ...mapActions(useSecurityStore, {
@@ -89,9 +105,46 @@ export default {
       $logout: 'logout',
     }),
 
+    updateImg() {
+      const file = this.file
+      const reader = new FileReader();
+      this.errorMsg = " "
+      this.errorFlag = false
+
+      if(file.size > 60000){
+        this.errorMsg = "Error: tamano maximo de imagen 60kb"
+        this.errorFlag = true
+        return
+      }
+
+      if (!/\.(jpe?g|png|gif)$/i.test(file.name)) {
+        this.errorMsg = "Error: Tipo de archivo no soportado"
+        this.errorFlag = true
+        return;
+      }
+
+      reader.addEventListener(
+        "load",
+        () => {
+          // convert image file to base64 string
+          this.imageUrl = reader.result;
+        },
+        false
+      );
+
+      if (file) {
+        this.imageUrl = reader.readAsDataURL(file);
+      }
+    },
+
+    test(){
+      console.log(this.imageUrl);
+    },
+
     async createExercise(){
-      const exercise = new Exercise(this.name, this.name, "exercise",null);
+      const exercise = new Exercise(this.name, this.name, "exercise");
         this.exercise = await this.$createExercise(exercise);
+        this.exercise = await this.$addImg(exercise, this.imageUrl)
         this.$emit("createdExercise");
     }
 
