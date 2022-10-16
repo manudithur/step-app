@@ -193,8 +193,8 @@ export default {
       this.errorMsg = ""
       this.errorFlag = false
 
-      if(file.size > 80000){
-        this.errorMsg = "Error: tamano maximo de imagen 80kb"
+      if(file.size > 60000){
+        this.errorMsg = "Error: tamano maximo de imagen 60kb"
         this.errorFlag = true
         this.file = null
         return

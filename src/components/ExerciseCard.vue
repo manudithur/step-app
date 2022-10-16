@@ -4,6 +4,7 @@
             <div>
               <h2>{{name}}</h2>
               <p>{{detail}}</p>
+              <p>{{difficulty}}</p>
               <p>Created on: {{dateString}}</p>
             </div>
           </v-card>
@@ -20,7 +21,8 @@ export default{
     isActivity: Boolean,
     isRest: Boolean,
     date: Number,
-    id: Number
+    id: Number,
+    difficulty: String
   },
 
   computed:{

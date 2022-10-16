@@ -5,7 +5,13 @@
       <v-row class="justify-center">
         <v-col cols="5">
           <v-card class="rounded-xl centerCard pa-12">
-            <h1 class="onGrey text-center mb-8">Sign Up</h1>
+            <h1 class="onGrey text-center mb-1">Sign Up</h1>
+            <p class="text-center mb-5">
+              Already a member?
+              <router-link to="/login">
+                <span class="subtitleLink">Login</span>
+              </router-link>  
+            </p>
             <v-row class="justify-center text-center">
               <p class="red--text">{{errorMsg}}</p>
               <v-col cols="8">
@@ -59,6 +65,11 @@
 .onGrey {
   color: #5a6175;
   font-size: 40px;
+}
+
+.subtitleLink {
+  color: #33d657;
+  text-decoration: underline;
 }
 
 .content {
