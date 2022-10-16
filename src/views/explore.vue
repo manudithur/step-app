@@ -16,7 +16,7 @@
             </v-toolbar>
           </v-row>
           <v-row>
-            <v-col cols="3" v-for="(e) in exercises" :key="e.id">
+            <v-col cols="3" v-for="(e) in routines" :key="e.id">
               <ExerciseCard
                   :id="e.id"
                   :name="e.name"
@@ -64,15 +64,15 @@ import NavBar from '../components/NavBar.vue';
 import FooterBar from '../components/FooterBar.vue';
 import { mapState, mapActions } from "pinia"
 import { useSecurityStore } from "@/stores/SecurityStore";
-import { useExerciseStore } from "@/stores/exerciseStore";
 import ExerciseCard from "@/components/ExerciseCard";
+import {useRoutineStore} from "@/stores/routineStore";
 
 export default {
   name: 'App',
   data: () => ({
     value:50,
     controller:'',
-    exercises: undefined,
+    routines: undefined,
     order: true,
     keys: ['date', 'difficulty', 'category'],
     key: 'date'
@@ -87,7 +87,7 @@ export default {
    async created() {
     const securityStore = useSecurityStore();
     await securityStore.initialize();
-    await this.getAllExercises();
+    await this.getAllRoutines();
   },
 
   computed:{
@@ -100,17 +100,18 @@ export default {
   },
 
   methods:{
+    ...mapActions(useRoutineStore, {
+      $createRoutine: 'create',
+      $modifyRoutine: 'modify',
+      $deleteRoutine: 'delete',
+      $getRoutine: 'get',
+      $getAllRoutines: 'getAll'
+    }),
+
     ...mapActions(useSecurityStore, {
       $getCurrentUser: 'getCurrentUser',
       $login: 'login',
       $logout: 'logout',
-    }),
-    ...mapActions(useExerciseStore, {
-      $createExercise: 'create',
-      $modifyExercise: 'modify',
-      $deleteExercise: 'delete',
-      $getExercise: 'get',
-      $getAllExercises: 'getAll'
     }),
 
     setResult(result){
@@ -126,19 +127,19 @@ export default {
       } else
         this.order = true;
       this.exercises = this.exercises.sort((a,b)=> this.order ? a.date - b.date : b.date - a.date)
-    },  
+    },
 
-    async getAllExercises() {
+    async getAllRoutines() {
       try {
         this.controller = new AbortController()
-        const exercises = await this.$getAllExercises(this.controller);
-        this.exercises= exercises.content;
+        const routines = await this.$getAllRoutines(this.controller);
+        this.routines = routines.content;
         this.controller = null
-        this.setResult(exercises)
-      } catch(e) {
+        this.setResult(routines)
+      } catch (e) {
         this.setResult(e)
       }
-    }
+    },
   }
 
 };
