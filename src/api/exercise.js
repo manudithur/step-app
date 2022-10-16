@@ -22,8 +22,8 @@ class ExerciseApi{
         return await Api.get(ExerciseApi.getUrl(`${exercise.id}/images`), true)
     }
 
-    static async modify(exercise){
-        return await Api.put(ExerciseApi.getUrl(exercise.id),true, exercise);
+    static async modify(id, newData){
+        return await Api.put(ExerciseApi.getUrl(id),true, newData);
     }
 
     static async delete(id){

@@ -125,8 +125,8 @@ export default {
       else if (index === this.editMode) {
         this.editMode = -1;
         await this.$modifyExercise(this.exercises[index], {
-          "name": "HOLA",
-          "detail": "HOLA",
+          "name": this.exercises[index].name,
+          "detail": this.exercises[index].detail,
           "type": "exercise",
           "metadata": null
         });

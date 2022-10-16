@@ -48,7 +48,7 @@ export const useExerciseStore = defineStore("exercise", {
         },
 
         async modify(exercise, newData) {
-            const result = await ExerciseApi.modify(exercise.id,newData);
+            const result = await ExerciseApi.modify(exercise.id, newData);
             const index = this.findIndex(result);
             if (index >= 0)
                 this.replace(index, result);
