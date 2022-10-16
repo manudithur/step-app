@@ -23,26 +23,19 @@
               </v-row>
               <v-row class="pt-4">
                 <v-btn x-large elevation="4" class="buttonHome rounded-lg white">
+                  <router-link class="RLink" to="/explore">
                   Continue Now!
+                  </router-link>
                 </v-btn>
               </v-row>
             </v-container>
           </v-col>
           <v-col cols="4" class="white--text">
             <v-row class="justify-center pb-4">
-              <h1 class="title-workout"  >Current Workout</h1>
+              <h1 class="title-workout"  >Featured Workout</h1>
             </v-row>
             <v-card class="white rounded-xl primary--text pb-5 mb-16">
-              <v-img :aspect-ratio="1.8" class="text-left" width="800" src="../assets/slowyoga.png">
-                <v-container class="pa-5">
-                  <div class="pa-3" style="display:inline-block">
-                    <v-chip class="white pa-5" large style="font-weight:bold" >YOGA</v-chip>
-                  </div>
-                  <div class="pa-3" style="display:inline-block">
-                    <v-chip class="white pa-5" large style="font-weight:bold">ELONGATION</v-chip>
-                  </div>
-                </v-container>
-              </v-img>
+              <v-img :aspect-ratio="1.8" class="text-left" width="800" src="../assets/slowyoga.png"/>
               <v-row class="justify-center pt-5">
                 <h1 class="ml-3 ">SLOW YOGA</h1>
               </v-row>
@@ -91,7 +84,7 @@
         </v-row>
 
           <v-row class=" justify-center white--text">
-            <h1 class = "title-workout ml-100 mb-5">Your favourites</h1>
+            <h1 class = "title-workout ml-100 mb-5">Your routines</h1>
           </v-row>
 
         <v-row class="justify-center mb-10">
@@ -107,32 +100,50 @@
                 show-arrows
             >
               <v-slide-item
-                  v-for="n in 15"
-                  :key="n"
-                  v-slot="{ active, toggle }"
+                  v-for="(e) in routines" :key="e.id"
               >
-                <v-card
-                    :color="active ? 'primary' : 'grey lighten-1'"
-                    class="ma-4 rounded-xl"
-                    height="200"
-                    width="300"
-                    @click="toggle"
-                >
-                  <v-row
-                      class="fill-height"
-                      align="center"
-                      justify="center"
-                  >
-                    <v-scale-transition>
-                      <v-icon
-                          v-if="active"
-                          color="white"
-                          size="48"
-                          v-text="'mdi-close-circle-outline'"
-                      ></v-icon>
-                    </v-scale-transition>
-                  </v-row>
-                </v-card>
+<!--                <v-card-->
+<!--                    :color="active ? 'primary' : 'grey lighten-1'"-->
+<!--                    class="ma-4 rounded-xl"-->
+<!--                    height="200"-->
+<!--                    width="300"-->
+<!--                    @click="toggle"-->
+<!--                >-->
+                  <router-link class="RLink" :to="`/edit/${e.id -1}`"><RoutineCard :id="e.id"
+                               :name="e.name"
+                               :detail="e.detail"
+                               :date ="e.date"/>
+                  </router-link>
+
+              </v-slide-item>
+            </v-slide-group>
+          </v-sheet>
+        </v-row>
+        <v-row class=" justify-center white--text">
+          <h1 class = "title-workout ml-100 mb-5">Your exercises</h1>
+        </v-row>
+        <v-row class="justify-center mb-10">
+          <v-sheet
+              class="mx-auto rounded-xl"
+              elevation="8"
+              max-width="1200"
+          >
+            <v-slide-group
+                v-model="model"
+                class="pa-4"
+                center-active
+                show-arrows
+            >
+              <v-slide-item
+                  v-for="(e) in exercises" :key="e.id"
+              >
+                <router-link class="RLink" :to="`/edit/${e.id -1}`"><ExerciseCard
+                                                                   :name="e.name"
+                                                                   :detail="e.detail"
+                                                                   :difficulty="e.difficulty"
+                                                                   :date ="e.date"/>
+                </router-link>
+
               </v-slide-item>
             </v-slide-group>
           </v-sheet>
@@ -174,23 +185,30 @@ p {
 
 <script>
 import NavBar from '../components/NavBar.vue';
+import RoutineCard from '../components/routineCard.vue';
+import ExerciseCard from '../components/ExerciseCard.vue';
 import FooterBar from '../components/FooterBar.vue';
 import { mapState, mapActions } from "pinia"
 import { useSecurityStore } from "@/stores/SecurityStore";
 import { useExerciseStore } from "@/stores/exerciseStore";
 import router from '@/router';
+import {useRoutineStore} from "@/stores/routineStore";
 
 export default {
   name: 'App',
   data: () => ({
     value:80,
     controller:'',
-    exercises: undefined
+    exercises: undefined,
+    routine: undefined,
+    routines: undefined
   }),
 
   components: {
     NavBar,
-    FooterBar
+    FooterBar,
+    RoutineCard,
+    ExerciseCard
   },
 
   async created() {
@@ -199,7 +217,9 @@ export default {
     if(!securityStore.isLoggedIn){
       router.push('/login')
     }
-    this.getAllExercises();
+    await this.getAllExercises();
+    await this.getAllRoutines();
+    await this.getRoutine();
   },
 
   computed:{
@@ -208,6 +228,9 @@ export default {
     }),
     ...mapState(useSecurityStore, {
       $isLoggedIn: 'isLoggedIn'
+    }),
+    ...mapState(useRoutineStore, {
+      $getAllRoutines: 'getAll'
     })
   },
 
@@ -242,7 +265,22 @@ export default {
       } catch(e) {
         this.setResult(e)
       }
-    }
+    },
+    async getRoutine(){
+      console.log(this.routines[4])
+      this.routine = await this.$getRoutine(this.routines[1]);
+    },
+    async getAllRoutines() {
+
+      this.controller = new AbortController();
+      const routines = await this.$getAllRoutines(this.controller);
+
+      this.routines = routines.content;
+      this.controller = null
+
+      console.log("por favor");
+
+    },
   }
 
 };
