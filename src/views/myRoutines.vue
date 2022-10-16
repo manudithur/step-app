@@ -46,7 +46,7 @@
 <script>
 import NavBar from "@/components/NavBar";
 import FooterBar from "@/components/FooterBar";
-import {mapActions} from "pinia";
+import {mapActions, mapState} from "pinia";
 import {useRoutineStore} from "@/stores/routineStore";
 import {useSecurityStore} from "@/stores/SecurityStore";
 
@@ -59,6 +59,14 @@ export default {
       routines: undefined //fetch exercises TODO: que haga fetch de la api y acomodar los capos que muestra
     }
   },
+  computed: {
+    ...mapState(useSecurityStore, {
+      $user: state => state.user,
+    }),
+    ...mapState(useSecurityStore, {
+      $isLoggedIn: 'isLoggedIn'
+    }),
+  },
 
   async created() {
     const securityStore = useSecurityStore();
@@ -66,7 +74,7 @@ export default {
     await this.getAllRoutines();
   },
 
-  methods :{
+  methods : {
     async getAllRoutines() {
       try {
         this.controller = new AbortController()
@@ -86,21 +94,22 @@ export default {
       console.log(index)
 
     },
+
+
+    ...mapActions(useRoutineStore, {
+      $createRoutine: 'create',
+      $modifyRoutine: 'modify',
+      $deleteRoutine: 'delete',
+      $getRoutine: 'get',
+      $getAllRoutines: 'getAll'
+    }),
+
+    ...mapActions(useSecurityStore, {
+      $getCurrentUser: 'getCurrentUser',
+      $login: 'login',
+      $logout: 'logout',
+    }),
   },
-
-  ...mapActions(useRoutineStore, {
-    $createRoutine: 'create',
-    $modifyRoutine: 'modify',
-    $deleteRoutine: 'delete',
-    $getRoutine: 'get',
-    $getAllRoutines: 'getAll'
-  }),
-
-  ...mapActions(useSecurityStore, {
-    $getCurrentUser: 'getCurrentUser',
-    $login: 'login',
-    $logout: 'logout',
-  }),
 
 
   name: "myRoutines",
