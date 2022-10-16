@@ -31,6 +31,10 @@ class RoutineApi{
     static async get(id){
         return await Api.get(RoutineApi.getUrl(id), true)
     }
+    static async getCycles(id){
+        return await Api.get(RoutineApi.getUrl(`${id}/cycles`))
+    }
+
 
     static async getAll(){
         return await Api.get(RoutineApi.getUrl(),true)
@@ -52,10 +56,10 @@ class Routine{
 }
 
 class Cycle{
-    constructor(name, detail, order, repetitions){
+    constructor(name, detail, order, repetitions,type){
         this.name = name;
         this.detail = detail;
-        this.type="warmup";
+        this.type= type;
         this.order = order;
         this.repetitions = repetitions;
     }

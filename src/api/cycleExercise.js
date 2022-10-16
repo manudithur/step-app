@@ -14,6 +14,9 @@ class CycleExerciseApi{
         return await Api.post(CycleExerciseApi.getUrl(`${cycleId}/exercises/${exerciseId}`), true, cycleExercise);
 
     }
+    static async getCycleExercises(id){
+        return await Api.get(CycleExerciseApi.getUrl(`${id}/exercises`))
+    }
 
 }
 

@@ -354,9 +354,9 @@ export default {
     async finish(){
       const myRoutine = new Routine(this.routine.name, this.routine.detail,this.routine.isPublic, this.routine.difficulty);
       this.routine = await this.$createRoutine(myRoutine);
-      const warmup = new Cycle(this.cycles[0].cycleName, this.cycles[0].cycleName, 1, this.cycles[0].repetitions);
-      const cycle1 = new Cycle(this.cycles[1].cycleName, this.cycles[1].cycleName, 2 , this.cycles[1].repetitions);
-      const cooldown = new Cycle(this.cycles[2].cycleName, this.cycles[2].cycleName, 3 , this.cycles[2].repetitions);
+      const warmup = new Cycle(this.cycles[0].cycleName, this.cycles[0].cycleName, 1, this.cycles[0].repetitions,"warmup");
+      const cycle1 = new Cycle(this.cycles[1].cycleName, this.cycles[1].cycleName, 2 , this.cycles[1].repetitions,"cycle");
+      const cooldown = new Cycle(this.cycles[2].cycleName, this.cycles[2].cycleName, 3 , this.cycles[2].repetitions,"cooldown");
       const c1=await this.$addCycle(this.routine.id, warmup);
       const c2 =await  this.$addCycle(this.routine.id, cycle1);
       const c3 = await this.$addCycle(this.routine.id, cooldown);
