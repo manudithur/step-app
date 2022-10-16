@@ -47,8 +47,6 @@ class User{
         this.password = password;
         this.email = email;
         this.username = username;
-        this.metadata = ""
-        this.avatarUrl = 'https://cdn1.vectorstock.com/i/thumb-large/62/60/default-avatar-photo-placeholder-profile-image-vector-21666260.jpg';
     }
 }
 
