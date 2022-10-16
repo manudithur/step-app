@@ -3,7 +3,7 @@
 <template>
   <v-card class="secondary rounded-xl white--text pb-5">
     <v-img
-      :aspect-ratio=size
+      :aspect-ratio=4
       class="text-left"
       width="600"
       :src=require(workoutImg)
@@ -62,7 +62,6 @@
 export default {
   name: "WorkoutCard",
   props: {
-    size: String,
     workoutName: String,
     workoutImg: String,
     trainerImg: String,

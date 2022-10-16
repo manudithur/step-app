@@ -1,7 +1,7 @@
 <template>
   <v-app-bar id="navbar" height="100%" elevation="4" app>
     <v-app-bar-title>
-      <v-img src="../assets/stepApp.png" contain max-width="20%"></v-img>
+      <v-img src="../assets/stepApp.png" contain max-width="20%" min-width="200px"></v-img>
     </v-app-bar-title>
     <v-spacer></v-spacer>
     <v-toolbar-items class="align-center">
