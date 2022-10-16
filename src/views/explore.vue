@@ -17,7 +17,7 @@
           </v-row>
           <v-row>
             <v-col cols="3" v-for="(e) in routines" :key="e.id">
-              <router-link :to="`/edit/${e.id}`">
+              <router-link :to="`/edit/${e.id -1}`">
                 <RoutineCard
                     :id="e.id"
                     :name="e.name"

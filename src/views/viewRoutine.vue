@@ -7,153 +7,24 @@
           <v-row>
             <v-col cols="2"/>
             <v-col cols="8">
-              <v-container class="mt-16 white--text">
-                <h1>Edit Workout:</h1>
-                <h3 class="mt-16">Step 1: Workout Info</h3>
-              </v-container>
-              <v-card class="white rounded-xl pa-5">
-                <h1>{{cycles}}</h1>
-                <v-row>
-                  <v-col cols="4" class="text-center">
-                    <h5 class="onWhite mt-6">Workout Name</h5>
-                  </v-col>
-                  <v-col cols="6">
-                    <v-text-field
-                        class="mt-4 inputField"
-                        solo
-                        rounded
-                        single-line
-                        dark
-                        background-color="#55B8FF"
-                        v-model="routine.name"
-                    >{{routine.name}}</v-text-field>
-                  </v-col>
-                </v-row>
-                <v-row>
-                  <v-col cols="4" class="text-center">
-                    <h5 class="onWhite mt-5">Description</h5>
-                  </v-col>
-                  <v-col cols="6">
-                    <v-text-field
-                        class="mt-4 inputField"
-                        solo
-                        rounded
-                        single-line
-                        dark
-                        background-color="#55B8FF"
-                        v-model="routine.detail"
-                    >{{ routine.detail }}</v-text-field>
-                  </v-col>
-                </v-row>
-                <v-row>
-                  <v-col cols="4" class="text-center">
-                    <h5 class="onWhite mt-2">Intensity</h5>
-                  </v-col>
-                  <v-col cols="6">
-                    <v-text-field
-                        rounded
-                        single-line
-                        solo
-                        background-color="#55B8FF"
-                        dark
-                        v-model="routine.difficulty"
-                    >{{routine.difficulty}}</v-text-field>
-                  </v-col>
-                </v-row>
-              </v-card>
-            </v-col>
-          </v-row>
-        </v-window-item>
-        <v-window-item :value="2">
-          <v-row>
-            <v-col cols="2" />
-            <v-col cols="8">
-              <v-container class="mt-16 white--text">
-                <h1>Create a new Workout:</h1>
-                <h3 class="mt-16">Step 2: Create Routine</h3>
-              </v-container>
-
-              <v-card class="white rounded-xl  mb-15">
-                <v-row>
-                  <v-btn
-                      class="cycleButton"
-                      v-for="(cycle, index) in cycles" :key="cycle.cycleName"
-                      @click="updateStage(index)">
-                    {{cycle.cycleName}}
-                  </v-btn>
-                </v-row>
-              </v-card>
-
-              <v-window>
-                <v-window-item  v-for="(cycle) in cycles" :key="cycle.cycleName">
-                  <v-card class="white rounded-xl pa-5 mb-15">
-                    <h1 class="ma-5">{{cycles[selectedStage].cycleName}}</h1>
-                    <v-row v-for="(n,index) in cycles[selectedStage].count" :key="n">
-                      <v-select
-                          :items="exercises"
-                          item-text="name"
-                          item-value="id"
-                          label="Select exercise"
-                          v-validate="'required'"
-                          v-model="cycles[selectedStage].exercises[index].id"
-                          rounded
-                          single-line
-                          solo
-                          background-color="#55B8FF"
-                          dark
-                      ></v-select>
-                      <v-btn-toggle></v-btn-toggle>
-                      <v-btn @click="decreaseAmount(index)">-</v-btn>
-
-                      <p class="pa-2"> {{ cycles[selectedStage].exercises[index].repsOrTime}} </p>
-
-                      <v-btn @click="increaseAmount(index)">+</v-btn>
-                      <v-btn><v-icon
-                          @click="deleteElement(index)">mdi-delete</v-icon></v-btn>
-                    </v-row>
-                    <v-row class="justify-center">
-                      <v-btn
-                          @click="updateContent()"
-                          class="addButton"
-                          small
-                      >+</v-btn>
-                    </v-row>
-                  </v-card>
-                </v-window-item>
-              </v-window>
-
-            </v-col>
-          </v-row>
-        </v-window-item>
-        <v-window-item :value="3">
-          <v-row>
-            <v-col cols="2"/>
-            <v-col cols="8">
               <v-container class="mt-5 white--text">
-                <h1>Create a new Workout:</h1>
-                <h3 class="mt-6">Step 3: Review Workout</h3>
+                <h1>{{routine.name}}</h1>
+                <h3 class="mt-6">{{routine.detail}}</h3>
               </v-container>
 
               <v-card class = "white rounded-xl pa-5">
                 <div v-for="(cycle) in cycles"
                      :key="cycle.id">
                   <v-row>
-                    <h2>{{cycle.cycleName}}</h2>
+                    <h2>{{cycle.name}}</h2>
                   </v-row>
 
-                  <div v-for="exercise in cycle.exercises" :key="exercise">
+                  <div v-for="exercise in cycleExercises" :key="exercise">
                     <v-row>
-                      <ExercisePill :name="getName(exercise.id)" :repetitions="exercise.repsOrTime"/>
+                      <ExercisePill :name="getName(exercise)" :repetitions="exercise.repetitions"/>
                     </v-row>
                   </div>
                 </div>
-                <v-col cols="2" >
-                  <v-btn @click="close()" icon class="mt-2 ml-4">
-                    <v-icon>
-                      mdi-delete
-                    </v-icon>
-                  </v-btn>
-                </v-col>
 
               </v-card>
             </v-col>
@@ -198,7 +69,7 @@ export default {
       requestedIndex:undefined,
       selectedStage: 0,
       cycles: undefined,
-      cycleExercises:undefined,
+      cycleExercises:[],
       step:0,
       exercises: undefined
     }
@@ -210,7 +81,7 @@ export default {
     await this.getRoutine();
 
     await this.getCycles();
-    await this.getCycleExercises();
+    this.cycles.forEach(element => this.getCycleExercises(element.id));
       // const data = await RoutineApi.getCycles(this.requestedId);
       // for (const cycle of data.content) {
       //   const exerciseObj = await cycleExerciseApi.getCycleExercises(cycle.id);
@@ -247,8 +118,9 @@ export default {
       this.cycles = cycles.content;
     },
 
-    async getCycleExercises(){
-      this.cycles.forEach(element => this.cycleExercises.push(this.$getCycleExercises(element.id)))
+    async getCycleExercises(id){
+      const aux = await this.$getCycleExercises(id);
+      this.cycleExercises.push(aux.content);
     },
 
     async getAllRoutines() {
