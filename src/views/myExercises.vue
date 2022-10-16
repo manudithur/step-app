@@ -52,6 +52,7 @@ import FooterBar from "@/components/FooterBar";
 import {mapActions, mapState} from "pinia";
 import {useExerciseStore} from "@/stores/exerciseStore";
 import {useSecurityStore} from "@/stores/SecurityStore";
+import router from '@/router';
 
 
 
@@ -76,6 +77,9 @@ export default {
   async created() {
     const securityStore = useSecurityStore();
     await securityStore.initialize();
+    if(!securityStore.isLoggedIn){
+      router.push('/login')
+    }
     await this.getAllExercises();
   },
 

@@ -103,7 +103,6 @@ import { useSecurityStore } from "../stores/SecurityStore";
 import { Credentials } from "../api/user";
 import router from '@/router';
 
-
 export default {
   name: "App",
   data: () => ({
@@ -121,6 +120,9 @@ export default {
   async created() {
     const securityStore = useSecurityStore();
     await securityStore.initialize();
+    if(securityStore.isLoggedIn){
+      router.push('/home')
+    }
   },
 
   computed:{

@@ -6,7 +6,8 @@
         <v-col cols="5">
           <v-card class="rounded-xl centerCard pa-12">
             <h1 class="onGrey text-center mb-8">Sign Up</h1>
-            <v-row class="justify-center">
+            <v-row class="justify-center text-center">
+              <p class="red--text">{{errorMsg}}</p>
               <v-col cols="8">
                 <v-text-field
                     outlined
@@ -21,6 +22,7 @@
                     label="Email"
                     v-model="email"
                 >{{email}}</v-text-field>
+                <p class="red--text" v-if="error">{{passwordError}}</p>
                 <v-text-field
                     outlined class="input"
                     label="Password"
@@ -54,10 +56,6 @@
 
 <!-- Ojo con el important-->
 <style scoped>
-.input {
-  padding-top: 5px;
-}
-
 .onGrey {
   color: #5a6175;
   font-size: 40px;
@@ -104,6 +102,8 @@ export default {
     username:'',
     email:'',
     password:'',
+    Rpassword: '',
+    errorMsg: '',
     error: null
   }),
 
@@ -115,6 +115,9 @@ export default {
   async created() {
     const securityStore = useSecurityStore();
     await securityStore.initialize();
+    if(securityStore.isLoggedIn){
+      router.push('/home')
+    }
   },
 
   computed:{
@@ -139,16 +142,24 @@ export default {
     },
 
     async addUser(){
-        this.error = null;
+        this.error = false;
+        this.errorMsg = ''
+        this.passwordError = ''
+        if(!(this.password === this.Rpassword)){
+          this.error = true
+          this.passwordError = "No coinciden las contraseñas"
+          return
+        }
         const user = await new User(this.username, this.email, this.password)
       try{
         await this.$addUser(user)
       }
       catch(e){
           console.log(e);
+          this.errorMsg = "Por favor verifique los datos ingresados"
           this.error = true;
       } finally{
-        if(this.error == null)
+        if(!this.error)
           router.push('/verification')
       }
     },

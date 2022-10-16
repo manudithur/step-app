@@ -66,6 +66,7 @@ import { mapState, mapActions } from "pinia"
 import { useSecurityStore } from "@/stores/SecurityStore";
 import ExerciseCard from "@/components/ExerciseCard";
 import {useRoutineStore} from "@/stores/routineStore";
+import router from '@/router'
 
 export default {
   name: 'App',
@@ -87,7 +88,10 @@ export default {
    async created() {
     const securityStore = useSecurityStore();
     await securityStore.initialize();
-    await this.getAllRoutines();
+    if(!securityStore.isLoggedIn){
+      router.push('/login')
+    }
+    await this.getAllExercises();
   },
 
   computed:{
