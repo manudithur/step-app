@@ -1,43 +1,57 @@
 <template>
-      <v-row class="justify-center ma-10">
-        <v-col>
-          <v-card class="rounded-xl centerCard pa-12" max-width="800px">
-            <h1 class="onGrey text-center pb-5">Create Exercise</h1>
-            <v-row class="justify-center py-5">
-              <v-col cols="8">
-                <v-text-field
-                    outlined
-                    class="input"
-                    label="Exercise Name"
+        <div>
+          <v-card class="rounded-xl centerCard pa-8">
+            <v-row class="justify-center text-center py-5">
+              <h2 v-if="success" class="green--text">SUCCESFULLY ADDED!</h2>
+              <v-col cols="10">
+                <v-row class="justify-center ma-0">
+                  <v-col cols="3">
+                    <h2 class="pt-2">Exercise Name</h2>
+                  </v-col>
+                  <v-col cols="8">
+                  <v-text-field
+                    solo
+                    rounded
+                    single-line
+                    dark
+                    background-color="#55B8FF"
+                    class="input ml-5"
                     v-model="name"
                 >{{name}}</v-text-field>
-                <p v-if="errorFlag" class="red--text" >{{errorMsg}}</p>
-                <v-file-input 
-                  v-model="file"
-                  outlined
-                  :disabled="edit==0"
-                  @change="updateImg"
-                  prepend-icon=""
-                  show-size
-                  append-icon="mdi-upload" 
-                  label="Upload new avatar"></v-file-input>
-                  <v-btn @click="test"></v-btn>
+                </v-col>
+                </v-row>
+                <v-row class="justify-center">
+                  <v-col cols="3">
+                    <h2 class="pt-2">Image URL</h2>
+                  </v-col>
+                  <v-col cols="8">
+                    <v-text-field
+                      solo
+                      rounded
+                      single-line
+                      dark
+                      background-color="#55B8FF"
+                      class="input ml-5 mr-3"
+                      append-icon="mdi-link"
+                      v-model="imageUrl"
+                  >{{imageUrl}}</v-text-field>
+                </v-col>
+                </v-row>
+                <p v-if="errorFlag" class="red--text">{{errorMsg}}</p>
               </v-col>
             </v-row>
-            <v-row class="justify-center">
-              <v-btn rounded large class="button"
-                     @click="createExercise"> Add </v-btn>
-            </v-row>
           </v-card>
-        </v-col>
-      </v-row>
+          <v-row class="justify-center mt-5">
+              <v-btn rounded x-large class="button" @click="createExercise"> ADD </v-btn>
+          </v-row>
+        </div>
 </template>
 
 <!-- Ojo con el important-->
 <style scoped>
 
 .button{
-  color:#1B56ED !important;
+  color:black;
   font-weight:bold;
 
 }
@@ -68,7 +82,7 @@ p {
 
 <script>
 import { mapState, mapActions } from "pinia";
-import {Exercise} from "../api/exercise"
+import {Exercise, Img} from "../api/exercise"
 import { useExerciseStore } from "../stores/exerciseStore";
 import { useSecurityStore } from "@/stores/SecurityStore";
 
@@ -83,7 +97,8 @@ export default {
       file: null,
       imageUrl: '',
       errorFlag: false,
-      errorMsg: " "
+      errorMsg: " ",
+      success: false
     }
   },
 
@@ -105,47 +120,30 @@ export default {
       $logout: 'logout',
     }),
 
-    updateImg() {
-      const file = this.file
-      const reader = new FileReader();
-      this.errorMsg = " "
-      this.errorFlag = false
+    async createExercise(){
+      this.errorFlag = false;
+      this.errorMsg = "";
 
-      if(file.size > 60000){
-        this.errorMsg = "Error: tamano maximo de imagen 60kb"
-        this.errorFlag = true
+      if(this.name.length == 0 || this.imageUrl == 0){
+        this.errorFlag = true;
+        this.errorMsg = "ERROR: Please fill all the fields"
         return
       }
-
-      if (!/\.(jpe?g|png|gif)$/i.test(file.name)) {
-        this.errorMsg = "Error: Tipo de archivo no soportado"
-        this.errorFlag = true
-        return;
-      }
-
-      reader.addEventListener(
-        "load",
-        () => {
-          // convert image file to base64 string
-          this.imageUrl = reader.result;
-        },
-        false
-      );
-
-      if (file) {
-        this.imageUrl = reader.readAsDataURL(file);
-      }
-    },
-
-    test(){
-      console.log(this.imageUrl);
-    },
-
-    async createExercise(){
-      const exercise = new Exercise(this.name, this.name, "exercise");
+      try{
+        const exercise = new Exercise(this.name, this.name, "exercise");
         this.exercise = await this.$createExercise(exercise);
-        this.exercise = await this.$addImg(exercise, this.imageUrl)
+        let img = new Img(this.imageUrl);
+        await this.$addImg(this.exercise, img);
         this.$emit("createdExercise");
+      } catch(e){
+        this.errorFlag = true
+        this.errorMsg = "ERROR: Duplicate exercise or other error"
+      }
+      finally{
+        if(!this.errorFlag){
+          this.success = true;
+        }
+      }
     }
 
   },

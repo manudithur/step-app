@@ -156,6 +156,7 @@ export default {
         this.error = false;
         this.errorMsg = ''
         this.passwordError = ''
+
         if(!(this.password === this.Rpassword)){
           this.error = true
           this.passwordError = "No coinciden las contraseñas"

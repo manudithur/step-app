@@ -2,7 +2,7 @@
   <v-app>
     <NavBar/>
     <v-main class="content">
-      <v-container fluid class="pb-10 pt-5">
+      <v-container fluid class="pb-10 pa-10 pt-5">
         <div v-if="!noRoutines">
           <v-row class="justify-left ml-5">
             <v-toolbar class="align-center rounded-xl" max-width="300px">
@@ -17,12 +17,13 @@
           </v-row>
           <v-row>
             <v-col cols="3" v-for="(e) in routines" :key="e.id">
-              <router-link :to="`/edit/${e.id -1}`">
+              <router-link class="RLink" :to="`/edit/${e.id -1}`">
                 <RoutineCard
                     :id="e.id"
                     :name="e.name"
                     :detail="e.detail"
                     :date ="e.date"
+                    :difficulty="e.difficulty"
                 />
               </router-link>
             </v-col>

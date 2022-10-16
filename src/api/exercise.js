@@ -1,7 +1,7 @@
 import {Api} from "./api"
 
 //en la api hay una categoria opcional de sports, por eso eligio esto
-export {ExerciseApi, Exercise}
+export {ExerciseApi, Exercise, Img}
 
 class ExerciseApi{
 
@@ -11,12 +11,15 @@ class ExerciseApi{
     }
 
     static async add(exercise){
-        return await Api.post(ExerciseApi.getUrl(), true, {
-            "name":`${exercise.name}`,
-            "detail": `${exercise.detail}`,
-            "type":"exercise",
-            "metadata":null
-        })
+        return await Api.post(ExerciseApi.getUrl(), true, exercise);
+    }
+
+    static async addImg(exercise, img){
+        return await Api.post(ExerciseApi.getUrl(`${exercise.id}/images`), true, img)
+    }
+
+    static async getImg(exercise){
+        return await Api.get(ExerciseApi.getUrl(`${exercise.id}/images`), true)
     }
 
     static async modify(exercise){
@@ -37,10 +40,16 @@ class ExerciseApi{
 }
 
 class Exercise{
-    constructor(name, detail, type, metadata) {
+    constructor(name, detail, type) {
         this.name=name;
         this.detail = detail;
         this.type = type;
-        this.metadata = metadata;
+    }
+}
+
+class Img {
+    constructor(url) {
+        this.number = 1;
+        this.url = url;
     }
 }

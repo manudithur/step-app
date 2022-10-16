@@ -1,15 +1,23 @@
 <template>
   <v-app>
     <NavBar/>
-    <v-main class="content">
+    <v-main class="content justify-center">
+      <v-row class="justify-center">
+        <v-container class="mt-16 white--text">
+            <h1 class="ml-5">Create a new Exercise:</h1>
+        </v-container>
+        <v-col cols="8">
+        <createExercise @createdExercise="getAllExercises"/>
+        </v-col>
+      </v-row>
       <v-window v-model="step">
         <v-window-item :value="1">
           <v-row>
             <v-col cols="2"/>
             <v-col cols="8">
-              <v-container class="mt-16 white--text">
+              <v-container class="mt-10 white--text">
                 <h1>Create a new Workout:</h1>
-                <h3 class="mt-16">Step 1: Workout Info</h3>
+                <h3 class="mt-5">Step 1: Workout Info</h3>
               </v-container>
               <v-card class="white rounded-xl pa-5">
                 <v-row>
@@ -68,9 +76,9 @@
           <v-row>
             <v-col cols="2" />
             <v-col cols="8">
-              <v-container class="mt-16 white--text">
+              <v-container class="mt-10 white--text">
                 <h1>Create a new Workout:</h1>
-                <h3 class="mt-16">Step 2: Create Routine</h3>
+                <h3 class="mt-5 mb-5">Step 2: Create Routine</h3>
               </v-container>
 
               <v-card class="white rounded-xl  mb-15">
@@ -128,9 +136,9 @@
           <v-row>
             <v-col cols="2"/>
             <v-col cols="8">
-              <v-container class="mt-5 white--text">
+              <v-container class="mt-10 white--text">
                 <h1>Create a new Workout:</h1>
-                <h3 class="mt-6">Step 3: Review Workout</h3>
+                <h3 class="mt-5 mb-5">Step 3: Review Workout</h3>
               </v-container>
 
               <v-card class = "white rounded-xl pa-5">
@@ -160,6 +168,7 @@
         </v-window-item>
       </v-window>
       <v-row class="mb-16">
+        <v-row>
         <v-col cols="2" />
         <v-col cols="1">
         <v-btn v-if="step !== 1 " rounded elevation="5" class="pa-7 mb-16 mt-10 next" width="100%" @click="step--">Prev</v-btn>
@@ -170,7 +179,9 @@
           <v-btn v-if="step === 3" rounded elevation="5" class="pa-7 mb-16 mt-10 next" width="100%" @click="finish">Finish</v-btn>
         </v-col>
       </v-row>
-      <createExercise @createdExercise="getAllExercises"/>
+
+      </v-row>
+
     </v-main>
     <FooterBar />
   </v-app>

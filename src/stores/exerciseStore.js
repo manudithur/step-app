@@ -37,6 +37,16 @@ export const useExerciseStore = defineStore("exercise", {
             return result;
         },
 
+        async addImg(exercise, img){
+            const result = await ExerciseApi.addImg(exercise, img);
+            return result;
+        },
+
+        async getImg(exercise){
+            const result = await ExerciseApi.getImg(exercise);
+            return result;
+        },
+
         async modify(exercise, newData) {
             const result = await ExerciseApi.modify(exercise.id,newData);
             const index = this.findIndex(result);
