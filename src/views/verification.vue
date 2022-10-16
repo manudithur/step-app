@@ -98,6 +98,9 @@ export default {
   async created() {
     const securityStore = useSecurityStore();
     await securityStore.initialize();
+    if(securityStore.isLoggedIn){
+      router.push('/login')
+    }
   },
 
   computed:{
@@ -116,7 +119,7 @@ export default {
       $logout: 'logout',
       $verify: 'verify'
     }),
-
+    
     async verify(){
       this.error = ' '
       const verificationData = new VerificationData(this.email, this.code)
@@ -128,7 +131,6 @@ export default {
         if(this.error == ' ')
           router.push('/login')
       }
-
     }
   }
 };

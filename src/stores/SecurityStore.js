@@ -21,9 +21,11 @@ export const useSecurityStore = defineStore("security", {
                 this.setToken(token);
             }
         },
-        modifyProfile(firstName, lastName){
+        modifyProfile(firstName, lastName, avatarUrl, metadata){
             this.user.firstName= firstName;
             this.user.lastName = lastName;
+            this.user.avatarUrl = avatarUrl;
+            this.user.metadata = metadata;
         },
 
         setUser(user) {
@@ -43,6 +45,10 @@ export const useSecurityStore = defineStore("security", {
             this.setToken(null);
         },
 
+        removeUser(){
+            this.setUser(null);
+        },
+
         async addUser(user){
             await UserApi.addUser(user);
         },
@@ -59,6 +65,7 @@ export const useSecurityStore = defineStore("security", {
         async logout() {
             await UserApi.logout();
             this.removeToken();
+            this.removeUser();
         },
 
         async getCurrentUser() {

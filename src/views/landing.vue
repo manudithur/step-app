@@ -149,12 +149,23 @@
   <script>
   import LoginNavBar from '../components/LoginNavBar.vue';
   import FooterBar from '../components/FooterBar.vue';
-  
+  import { useSecurityStore } from "../stores/SecurityStore";
+  import router from '@/router'
+
   export default {
     name: 'App',
     data: () => ({
     
     }),
+
+      
+  async created() {
+    const securityStore = useSecurityStore();
+    await securityStore.initialize();
+    if(securityStore.isLoggedIn){
+      router.push('/home')
+    }
+  },
   
     components: {
       LoginNavBar,
