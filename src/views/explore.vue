@@ -17,13 +17,14 @@
           </v-row>
           <v-row>
             <v-col cols="3" v-for="(e) in routines" :key="e.id">
-              <ExerciseCard
-                  :id="e.id"
-                  :name="e.name"
-                  :detail="e.detail"
-                  :date ="e.date"
-                  :difficulty="e.difficulty"
-              />
+              <router-link :to="`/edit/${e.id}`">
+                <RoutineCard
+                    :id="e.id"
+                    :name="e.name"
+                    :detail="e.detail"
+                    :date ="e.date"
+                />
+              </router-link>
             </v-col>
 
           </v-row>
@@ -70,9 +71,9 @@ import NavBar from '../components/NavBar.vue';
 import FooterBar from '../components/FooterBar.vue';
 import { mapState, mapActions } from "pinia"
 import { useSecurityStore } from "@/stores/SecurityStore";
-import ExerciseCard from "@/components/ExerciseCard";
 import {useRoutineStore} from "@/stores/routineStore";
 import router from '@/router'
+import RoutineCard from "@/components/routineCard";
 
 export default {
   name: 'App',
@@ -87,7 +88,7 @@ export default {
   }),
 
   components: {
-    ExerciseCard,
+    RoutineCard,
     NavBar,
     FooterBar
   },

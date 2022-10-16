@@ -26,7 +26,7 @@ const routes = [
   { path: '/profile', component: Profile },
   { path: '/exercises', component: myExercises},
   { path: '/routines', component: myRoutines},
-  { path: '/edit', component: viewRoutine}
+  { path: '/edit/:id', component: viewRoutine}
 ]
 
 const router = new VueRouter({

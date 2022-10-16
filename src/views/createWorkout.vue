@@ -324,6 +324,7 @@ export default {
 
     ...mapActions(useExerciseStore,{
       $getAllExercises: 'getAll',
+      $getName: 'findIndex'
     }),
 
     ...mapActions(useSecurityStore, {
@@ -381,6 +382,7 @@ export default {
 
     getName(id){
      return this.exercises.find(o => o.id === id);
+
       //return JSON.parse(obj, null, 2);
     },
 

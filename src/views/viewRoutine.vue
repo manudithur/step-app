@@ -185,6 +185,7 @@ import {useSecurityStore} from "@/stores/SecurityStore";
 import FooterBar from "@/components/FooterBar";
 import NavBar from "@/components/NavBar";
 import ExercisePill from "@/components/exercisePill";
+
 // import {CycleExerciseApi as cycleExerciseApi} from "@/api/cycleExercise";
 
 export default {
@@ -203,7 +204,7 @@ export default {
     }
   },
   async created() {
-    this.requestedIndex = 0; //TODO: lo recibe por router
+    this.requestedIndex = this.$route.params.id;
     await this.getAllRoutines();
     await this.getAllExercises();
     await this.getRoutine();
