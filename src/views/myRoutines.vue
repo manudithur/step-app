@@ -27,7 +27,9 @@
               </v-col>
               <v-col cols="2"/>
               <v-col cols="1">
-                <v-btn><v-icon>mdi-pencil</v-icon></v-btn> <!-- TODO: Hacer que el router redirija a create workout con el index el url y con un parametro que indique modify y no create   -->
+                <router-link to="/edit">
+                  <v-btn><v-icon>mdi-pencil</v-icon></v-btn> <!-- TODO: Hacer que el router redirija a create workout con el index el url y con un parametro que indique modify y no create   -->
+                </router-link>
               </v-col>
               <v-col cols="1"/>
               <v-col cols="1">

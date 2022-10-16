@@ -11,6 +11,7 @@ import Explore from '../views/explore.vue'
 import Profile from '../views/profile.vue'
 import myExercises from "@/views/myExercises";
 import myRoutines from "@/views/myRoutines";
+import viewRoutine from "@/views/viewRoutine";
 
 Vue.use(VueRouter)
 
@@ -25,6 +26,7 @@ const routes = [
   { path: '/profile', component: Profile },
   { path: '/exercises', component: myExercises},
   { path: '/routines', component: myRoutines},
+  { path: '/edit', component: viewRoutine}
 ]
 
 const router = new VueRouter({

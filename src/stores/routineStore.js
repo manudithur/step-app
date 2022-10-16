@@ -55,7 +55,7 @@ export const useRoutineStore = defineStore("routine", {
             if (index >= 0)
                 return this.items[index];
 
-            const result = await RoutineApi.get();
+            const result = await RoutineApi.get(routine.id);
             this.push(result);
             return result;
         },
