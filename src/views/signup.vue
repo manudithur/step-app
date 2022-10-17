@@ -159,7 +159,7 @@ export default {
 
         if(!(this.password === this.Rpassword)){
           this.error = true
-          this.passwordError = "No coinciden las contraseñas"
+          this.passwordError = "Passwords need to match"
           return
         }
         const user = await new User(this.username, this.email, this.password)
@@ -168,7 +168,7 @@ export default {
       }
       catch(e){
           console.log(e);
-          this.errorMsg = "Por favor verifique los datos ingresados"
+          this.errorMsg = "Verify your data. Your username may exist"
           this.error = true;
       } finally{
         if(!this.error)

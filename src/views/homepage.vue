@@ -24,56 +24,27 @@
           </v-col>
           <v-col cols="4" class="white--text">
             <v-row class="justify-center pb-4">
-              <h1 class="title-workout"  >Featured Workout</h1>
+              <h1 class="title-workout"  >Explore different workouts!</h1>
             </v-row>
-            <v-card class="white rounded-xl primary--text pb-5 mb-16">
-              <v-img :aspect-ratio="1.8" class="text-left" width="800" src="../assets/slowyoga.png"/>
-              <v-row class="justify-center pt-5">
-                <h1 class="ml-3 ">SLOW YOGA</h1>
-              </v-row>
+            <router-link class="RLink" to="/explore">
+              <v-card class="white rounded-xl primary--text pb-5 mb-16">
+                <v-row class="justify-center pt-5">
+                  <h1 class="ml-3 ">SLOW YOGA</h1>
+                </v-row>
+                <v-row class="justify-center pa-5 align-center">
+                    <v-avatar size="80"><v-img src="../assets/michelle.png"></v-img></v-avatar>
+                  <v-col class="align-center pa-5">
+                    <h2>Michelle Jogi</h2>
+                    <p>8+ years of experience</p>
+                  </v-col>
+                </v-row>
 
-              <v-row class="justify-center pa-5">
-                <v-col cols="15">
-                  <v-avatar size="80"><v-img src="../assets/michelle.png"></v-img></v-avatar>
-                </v-col>
-                <v-col cols="50">
-                  <h2>Michelle Jogi</h2>
-                  <p>8+ years of experience</p>
-                </v-col>
-                <v-col cols="35">
-                  <v-rating
-                      background-color="black"
-                      color="black"
-                      empty-icon="mdi-star-outline"
-                      full-icon="mdi-star"
-                      half-icon="mdi-star-half-full"
-                      readonly
-                      length="5"
-                      dense
-                      size="20"
-                      value="4.5"
-                  ></v-rating>
-                  <p class="black--text">833 reviews</p>
-                </v-col>
-              </v-row>
-            </v-card>
+              </v-card>
+            </router-link>
           </v-col>
         </v-row>
 
-        <v-row>
-          <v-col cols="4"/>
-          <v-col cols="2">
-            <router-link class="RLink" to="/exercises">
-              <v-btn class="mb-15">Your Exercises</v-btn>
-            </router-link>
-          </v-col>
-          <v-col cols="2">
-            <router-link class="RLink" to="/routines">
-              <v-btn class="mb-15">Your Routines</v-btn>
-            </router-link>
-          </v-col>
 
-        </v-row>
 
           <v-row class=" justify-center white--text">
             <h1 class = "title-workout ml-100 mb-5">Your routines</h1>
@@ -203,8 +174,8 @@ export default {
       router.push('/login')
     }
     await this.getAllExercises();
-    await this.getAllRoutines();
-    await this.getRoutine();
+    await this.getUserRoutines();
+
   },
 
   computed:{
@@ -215,7 +186,8 @@ export default {
       $isLoggedIn: 'isLoggedIn'
     }),
     ...mapState(useRoutineStore, {
-      $getAllRoutines: 'getAll'
+      $getAllRoutines: 'getAll',
+      $getUserRoutines: 'getUserRoutines'
     })
   },
 
@@ -251,19 +223,18 @@ export default {
         this.setResult(e)
       }
     },
+
     async getRoutine(){
       console.log(this.routines[4])
       this.routine = await this.$getRoutine(this.routines[1]);
     },
-    async getAllRoutines() {
 
+    async getUserRoutines() {
       this.controller = new AbortController();
-      const routines = await this.$getAllRoutines(this.controller);
+      const myRoutines = await this.$getUserRoutines();
 
-      this.routines = routines.content;
+      this.routines = myRoutines;
       this.controller = null
-
-      console.log("por favor");
 
     },
   }

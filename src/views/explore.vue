@@ -2,8 +2,10 @@
   <v-app>
     <NavBar/>
     <v-main class="content">
-      <v-container fluid class="pb-10 pa-10 pt-5">
+      <v-container fluid class="ps-10">
         <div v-if="!noRoutines">
+          <h1 class="white--text mb-8 ms-8">Routines</h1>
+          <h2 class="white--text mb-8 ms-8">Sort by:</h2>
           <v-row class="justify-left ml-5">
             <v-toolbar class="align-center rounded-xl" max-width="300px">
               <v-select class="mx-3 mt-7" :items="keys" outlined dense v-model="key" @change="update()" style="max-width:300px"></v-select>

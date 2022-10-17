@@ -12,17 +12,7 @@
               label="EN"
             ></v-select>
           </v-col>
-          <v-col cols="2">
-            <h3 class="pb-2">SUPPORT</h3>
-            <p >Contact Us</p>
-            <p >FAQ</p>
-            <p >Terms & Conditions</p>
-          </v-col>
-          <v-col cols="2">
-            <h3 class="pb-2">GET TO KNOW US</h3>
-            <p >Info</p>
-            <p >Get Started</p>
-          </v-col>
+
       </v-row>
     </v-footer>
 </template>
