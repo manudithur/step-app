@@ -93,15 +93,15 @@
               </v-card>
 
               <v-window>
-                <v-window-item  v-for="(cycle, cycleIndex) in cycles" :key="cycle.cycleName">
+                <v-window-item  v-for="(cycle) in cycles" :key="cycle.cycleName">
                   <v-card class="white rounded-xl pa-8 mb-15">
                     <h1 class="mb-5">{{cycles[selectedStage].cycleName}}</h1>
                     <v-row class="mt-5" v-for="(n,index) in cycles[selectedStage].count" :key="n">
                       {{cycles[selectedStage].exercises[index]}}
                       <v-select
                           :items="exercises"
-                          return-object
-                          v-model="selectedExercise[selectedStage][index]"
+                          v-model="cycles[selectedStage].exercises[index].id"
+                          item-value="id"
                           item-text="name"
                           label="Select exercise"
                           rounded
@@ -109,9 +109,8 @@
                           solo
                           background-color="#55B8FF"
                           dark
-                          @change="updateInfo(selectedExercise[cycleIndex][index], index)"
                       ></v-select>
-                      {{cycles[selectedStage][index]}}
+
                       <v-btn-toggle></v-btn-toggle>
 
                       <v-btn @click="decreaseAmount(index)" class="rounded-pill mx-3 mt-1">-</v-btn>
