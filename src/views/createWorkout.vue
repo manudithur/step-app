@@ -97,7 +97,6 @@
                   <v-card class="white rounded-xl pa-8 mb-15">
                     <h1 class="mb-5">{{cycles[selectedStage].cycleName}}</h1>
                     <v-row class="mt-5" v-for="(n,index) in cycles[selectedStage].count" :key="n">
-                      {{cycles[selectedStage].exercises[index]}}
                       <v-select
                           :items="exercises"
                           v-model="cycles[selectedStage].exercises[index].id"
@@ -323,14 +322,14 @@ export default {
 
       for(let i = 0 ; i < this.cycles[0].count ; i++){
 
-        await this.$addCycleExercise({"order":i+1,"duration":this.cycles[0].exercises[i].repsOrTime,"repetitions":this.cycles[0].exercises[i].repsOrTime},c1.id, this.cycles[0].exercises[i].id);
+        await this.$addCycleExercise({"order":i+1,"duration":this.cycles[0].exercises[i].repetitions,"repetitions":this.cycles[0].exercises[i].repetitions},c1.id, this.cycles[0].exercises[i].id);
       }
       for(let i = 0 ; i < this.cycles[1].count ; i++){
 
-        await this.$addCycleExercise({"order":i+1,"duration":this.cycles[1].exercises[i].repsOrTime,"repetitions":this.cycles[1].exercises[i].repsOrTime},c2.id, this.cycles[1].exercises[i].id);
+        await this.$addCycleExercise({"order":i+1,"duration":this.cycles[1].exercises[i].repetitions,"repetitions":this.cycles[1].exercises[i].repetitions},c2.id, this.cycles[1].exercises[i].id);
       }
       for(let i = 0 ; i < this.cycles[2].count ; i++){
-        await this.$addCycleExercise({"order":i+1,"duration":this.cycles[2].exercises[i].repsOrTime,"repetitions":this.cycles[2].exercises[i].repsOrTime},c3.id, this.cycles[2].exercises[i].id);
+        await this.$addCycleExercise({"order":i+1,"duration":this.cycles[2].exercises[i].repetitions,"repetitions":this.cycles[2].exercises[i].repetitions},c3.id, this.cycles[2].exercises[i].id);
       }
     },
 
