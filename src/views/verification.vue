@@ -10,20 +10,19 @@
               <br>Enter your email and the code you received</p>
             <p class="red--text text-center">{{error}}</p>
             <v-row class="justify-center">
-              <v-text-field
-                  outlined
-                  class="input"
-                  label="email"
-                  v-model="email"
-              >{{email}}</v-text-field>
-            </v-row>
-            <v-row class="justify-center">
-              <v-col cols="8">
+              <v-col cols="10">
+                <v-text-field
+                    outlined
+                    class="input"
+                    label="email"
+                    v-model="email"
+                >{{email}}</v-text-field>
                 <v-otp-input
                     length="6"
                     v-model="code"
                 >{{code}}</v-otp-input>
               </v-col>
+
             </v-row>
             <v-row class="justify-center">
               <v-btn rounded large class="button"

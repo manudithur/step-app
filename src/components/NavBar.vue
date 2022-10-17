@@ -1,8 +1,10 @@
 <template>
   <v-app-bar id="navbar" height="100%" elevation="4" app>
-    <v-app-bar-title>
-      <v-img src="../assets/stepApp.png" contain max-width="20%" min-width="200px"></v-img>
-    </v-app-bar-title>
+    <router-link class="RLink" to="/">
+      <v-app-bar-title>
+        <v-img src="../assets/stepApp.png" contain max-width="20%" min-width="200px"></v-img>
+      </v-app-bar-title>
+    </router-link>
     <v-spacer></v-spacer>
     <v-toolbar-items class="align-center">
         <router-link class="RLink" to="/home">
