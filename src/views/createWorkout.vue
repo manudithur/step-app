@@ -93,29 +93,30 @@
               </v-card>
 
               <v-window>
-                <v-window-item  v-for="(cycle) in cycles" :key="cycle.cycleName">
+                <v-window-item  v-for="(cycle, cycleIndex) in cycles" :key="cycle.cycleName">
                   <v-card class="white rounded-xl pa-8 mb-15">
                     <h1 class="mb-5">{{cycles[selectedStage].cycleName}}</h1>
                     <v-row class="mt-5" v-for="(n,index) in cycles[selectedStage].count" :key="n">
+                      {{cycles[selectedStage].exercises[index]}}
                       <v-select
                           :items="exercises"
                           return-object
-                          v-model="selectedExercise"
+                          v-model="selectedExercise[selectedStage][index]"
                           item-text="name"
-                          item-value="id"
                           label="Select exercise"
                           rounded
                           single-line
                           solo
                           background-color="#55B8FF"
                           dark
-                          v-on:input="updateInfo(selectedExercise,index)"
+                          @change="updateInfo(selectedExercise[cycleIndex][index], index)"
                       ></v-select>
+                      {{cycles[selectedStage][index]}}
                       <v-btn-toggle></v-btn-toggle>
 
                       <v-btn @click="decreaseAmount(index)" class="rounded-pill mx-3 mt-1">-</v-btn>
 
-                      <h2 class="pa-2 "> {{ cycles[selectedStage].exercises[index].repsOrTime}} </h2>
+                      <h2 class="pa-2 "> {{ cycles[selectedStage].exercises[index].repetitions}} </h2>
 
                       <v-btn @click="increaseAmount(index)" class="rounded-pill mx-3 mt-1">+</v-btn>
                       <v-icon class="mt-n9" @click="deleteElement(index)">mdi-delete</v-icon>
@@ -138,40 +139,6 @@
             </v-col>
           </v-row>
         </v-window-item>
-        <v-window-item :value="3">
-          <v-row>
-            <v-col cols="2"/>
-            <v-col cols="8">
-              <v-container class="mt-10 white--text">
-                <h1>Create a new Workout:</h1>
-                <h3 class="mt-5 mb-5">Step 3: Review Workout</h3>
-              </v-container>
-
-              <v-card class = "white rounded-xl pa-5">
-                <div v-for="(cycle) in cycles"
-                     :key="cycle">
-                  <v-row>
-                    <h2>{{cycle.cycleName}}</h2>
-                  </v-row>
-
-                  <div v-for="exercise in cycle.exercises" :key="exercise">
-                    <v-row>
-                      <ExercisePill :name="exercise.name" :repetitions="exercise.repsOrTime"/>
-                    </v-row>
-                  </div>
-                </div>
-                    <v-col cols="2" >
-                      <v-btn @click="close()" icon class="mt-2 ml-4">
-                        <v-icon>
-                          mdi-delete
-                        </v-icon>
-                      </v-btn>
-                    </v-col>
-
-              </v-card>
-            </v-col>
-          </v-row>
-        </v-window-item>
       </v-window>
       <v-row class="mb-16">
         <v-row>
@@ -181,8 +148,10 @@
         </v-col>
         <v-col cols="6"/>
         <v-col cols="1">
-          <v-btn v-if="step !== 3" rounded elevation="5" class="pa-7 mb-16 mt-10 next" width="100%" @click="step++">Next</v-btn>
-          <v-btn v-if="step === 3" rounded elevation="5" class="pa-7 mb-16 mt-10 next" width="100%" @click="finish">Finish</v-btn>
+          <v-btn v-if="step !== 2" rounded elevation="5" class="pa-7 mb-16 mt-10 next" width="100%" @click="step++">Next</v-btn>
+          <router-link to="/home" class="RLink">
+            <v-btn v-if="step === 2" rounded elevation="5" class="pa-7 mb-16 mt-10 next" width="100%" @click="finish">Finish</v-btn>
+          </router-link>
         </v-col>
       </v-row>
 
@@ -254,7 +223,6 @@ import {mapActions, mapState} from "pinia";
 import {useSecurityStore} from "@/stores/SecurityStore";
 import {useRoutineStore} from "@/stores/routineStore";
 import {Routine, Cycle} from "@/api/routine";
-import ExercisePill from "@/components/exercisePill"
 import createExercise from "@/components/createExercise";
 import {useExerciseStore} from "@/stores/exerciseStore";
 
@@ -296,7 +264,7 @@ export default {
         difficulty: "rookie"
       },
       exercises: undefined,
-      selectedExercise:undefined
+      selectedExercise:[[],[],[]]
     }
   },
 
@@ -310,8 +278,7 @@ export default {
 
   methods: {
     updateInfo(exercise, index){
-      console.log(exercise);
-      console.log(exercise.name);
+
       this.cycles[this.selectedStage].exercises[index].name = exercise.name;
       this.cycles[this.selectedStage].exercises[index].id = exercise.id;
     },
@@ -321,9 +288,9 @@ export default {
     },
 
     updateContent(){
-      this.cycles[this.selectedStage].exercises.push({id:"",name:"",repsOrTime: 1})
+      this.cycles[this.selectedStage].exercises.push({id:"",name:"",repetitions: 1})
       this.cycles[this.selectedStage].count++
-      console.log(this.cycles)
+      this.selectedExercise[this.selectedStage].push({});
     },
 
     ...mapActions(useRoutineStore,{
@@ -373,12 +340,12 @@ export default {
     },
 
     increaseAmount(index) {
-      this.cycles[this.selectedStage].exercises[index].repsOrTime++;
+      this.cycles[this.selectedStage].exercises[index].repetitions++;
     },
 
     decreaseAmount(index) {
-      if (this.cycles[this.selectedStage].exercises[index].repsOrTime > 0)
-        this.cycles[this.selectedStage].exercises[index].repsOrTime--;
+      if (this.cycles[this.selectedStage].exercises[index].repetitions > 0)
+        this.cycles[this.selectedStage].exercises[index].repetitions--;
     },
 
     deleteElement(index){
@@ -426,7 +393,7 @@ export default {
 
 
   name: "createWorkout",
-  components: { FooterBar, NavBar, createExercise, ExercisePill },
+  components: { FooterBar, NavBar, createExercise },
 };
 </script>
 
