@@ -81,10 +81,10 @@
                 <h3 class="mt-5 mb-5">Step 2: Create Routine</h3>
               </v-container>
 
-              <v-card class="white rounded-xl  mb-15">
-                <v-row>
+              <v-card class="white rounded-xl  mb-15 ">
+                <v-row class="justify-center">
                   <v-btn
-                      class="cycleButton"
+                      class="cycleButton ma-5 pa-8 rounded-l"
                       v-for="(cycle, index) in cycles" :key="cycle.cycleName"
                       @click="updateStage(index)">
                     {{cycle.cycleName}}
@@ -198,7 +198,7 @@
   .cycleButton {
     background: #55B8FF !important;
     color: white !important;
-    max-width: 600px;
+    max-width: 800px;
     margin: 15px 25px;
     padding: 15px;
   }
@@ -342,7 +342,7 @@ export default {
     },
 
     decreaseAmount(index) {
-      if (this.cycles[this.selectedStage].exercises[index].repetitions > 0)
+      if (this.cycles[this.selectedStage].exercises[index].repetitions > 1)
         this.cycles[this.selectedStage].exercises[index].repetitions--;
     },
 
@@ -358,7 +358,6 @@ export default {
     getName(id){
      return this.exercises.find(o => o.id === id);
 
-      //return JSON.parse(obj, null, 2);
     },
 
     async getAllExercises(){

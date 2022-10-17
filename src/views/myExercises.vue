@@ -5,27 +5,27 @@
       <v-row class="align-center">
         <v-col cols="1">
           <router-link class="RLink" to="/home">
-            <v-btn class="ml-5 mt-10"><v-icon>mdi-arrow-left</v-icon></v-btn>
+            <v-btn class="ml-5"><v-icon>mdi-arrow-left</v-icon></v-btn>
           </router-link>
 
         </v-col>
         <v-col>
-          <h1 class="mt-10">My Exercises</h1>
+          <h1 class="white--text">My Exercises</h1>
         </v-col>
       </v-row>
-      <v-row>
+      <v-row >
         <v-col cols="1"/>
         <v-col cols="10">
-          <v-card class="rounded-xl">
+          <v-card class="rounded-xl mb-10">
             <v-row class="align-center ma-3" v-for="(exercise, index) in exercises" :key=exercise.id>
               <v-col cols="1"/>
               <v-col cols="4">
-                <li>
+                <div>
                   <h4 v-if="editMode !== index">{{exercises[index].name}}</h4>
                   <h6 v-if="editMode !== index">{{exercises[index].detail}}</h6>
                   <v-text-field  v-if="editMode === index" v-model="exercises[index].name">{{exercises[index].name}}</v-text-field>
                   <v-text-field  v-if="editMode === index" v-model="exercises[index].detail">{{exercises[index].detail}}</v-text-field>
-                </li>
+                </div>
 
               </v-col>
               <v-col cols="2"/>

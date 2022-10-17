@@ -168,7 +168,7 @@ export default {
       }
       catch(e){
           console.log(e);
-          this.errorMsg = "Verify your data. Your username may exist"
+          this.errorMsg = "Verify your data. Fields may be incomplete or your username may exist"
           this.error = true;
       } finally{
         if(!this.error)

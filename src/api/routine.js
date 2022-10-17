@@ -1,6 +1,6 @@
 import {Api} from "./api"
+import {UserApi} from "@/api/user";
 
-//en la api hay una categoria opcional de sports, por eso eligio esto
 export {RoutineApi, Routine, Cycle}
 
 class RoutineApi{
@@ -38,6 +38,18 @@ class RoutineApi{
 
     static async getAll(){
         return await Api.get(RoutineApi.getUrl(),true)
+    }
+
+    static async getUserRoutines(){
+        let ans = await this.getAll()
+        let routines = ans.content
+        let user = await UserApi.get();
+        let res = [];
+        routines.forEach((routine) => {
+            if (routine.user.id === user.id)
+                res.push(routine)
+        })
+        return res;
     }
 
     static async addCycle(routineId,cycle) {

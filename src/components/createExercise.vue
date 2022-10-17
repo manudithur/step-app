@@ -20,23 +20,23 @@
                 >{{name}}</v-text-field>
                 </v-col>
                 </v-row>
-                <v-row class="justify-center">
+                <v-row class="justify-center ma-0">
                   <v-col cols="3">
-                    <h2 class="pt-2">Image URL</h2>
+                    <h2 class="pt-2">Exercise Detail</h2>
                   </v-col>
                   <v-col cols="8">
                     <v-text-field
-                      solo
-                      rounded
-                      single-line
-                      dark
-                      background-color="#55B8FF"
-                      class="input ml-5 mr-3"
-                      append-icon="mdi-link"
-                      v-model="imageUrl"
-                  >{{imageUrl}}</v-text-field>
-                </v-col>
+                        solo
+                        rounded
+                        single-line
+                        dark
+                        background-color="#55B8FF"
+                        class="input ml-5"
+                        v-model="detail"
+                    >{{detail}}</v-text-field>
+                  </v-col>
                 </v-row>
+
                 <p v-if="errorFlag" class="red--text">{{errorMsg}}</p>
               </v-col>
             </v-row>
@@ -82,7 +82,7 @@ p {
 
 <script>
 import { mapState, mapActions } from "pinia";
-import {Exercise, Img} from "../api/exercise"
+import {Exercise} from "../api/exercise"
 import { useExerciseStore } from "../stores/exerciseStore";
 import { useSecurityStore } from "@/stores/SecurityStore";
 
@@ -94,8 +94,8 @@ export default {
   data() {
     return {
       name:"",
+      detail:"",
       file: null,
-      imageUrl: '',
       errorFlag: false,
       errorMsg: " ",
       success: false
@@ -124,16 +124,14 @@ export default {
       this.errorFlag = false;
       this.errorMsg = "";
 
-      if(this.name.length == 0 || this.imageUrl == 0){
+      if(this.name.length == 0 || this.detail == 0){
         this.errorFlag = true;
         this.errorMsg = "ERROR: Please fill all the fields"
         return
       }
       try{
-        const exercise = new Exercise(this.name, this.name, "exercise");
+        const exercise = new Exercise(this.name, this.detail, "exercise");
         this.exercise = await this.$createExercise(exercise);
-        let img = new Img(this.imageUrl);
-        await this.$addImg(this.exercise, img);
         this.$emit("createdExercise");
       } catch(e){
         this.errorFlag = true
