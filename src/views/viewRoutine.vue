@@ -8,19 +8,21 @@
             <v-col cols="2"/>
             <v-col cols="8">
               <v-container class="mt-5 white--text">
-                <h1>{{routine.name}}</h1>
-                <h3 class="mt-6">{{routine.detail}}</h3>
+                <h1>View routine: {{routine.name}}</h1>
+                <h3 class="mt-6">Hit next to edit</h3>
+
               </v-container>
 
               <v-card class = "white rounded-xl pa-5">
                 <div v-for="(cycle, index) in cycles"
-                     :key="cycle.id">
+                     :key="index">
                   <v-row>
                     <h2>{{cycle.name}}</h2>
                   </v-row>
 
                   <div v-for="exercise in cycleExercises[index]" :key="exercise">
                     <v-row>
+
                       <ExercisePill :name="exercise.exercise.name" :repetitions="exercise.repetitions"/>
                     </v-row>
                   </div>
@@ -30,19 +32,80 @@
             </v-col>
           </v-row>
         </v-window-item>
+        <v-window-item :value="2">
+          <v-row>
+            <v-col cols="2"/>
+            <v-col cols="8">
+              <v-container class="mt-10 white--text">
+                <h1>Edit Workout:</h1>
+                <h3 class="mt-5">Step 1: Workout Info</h3>
+              </v-container>
+              <v-card class="white rounded-xl pa-5">
+                <v-row>
+                  <v-col cols="4" class="text-center">
+                    <h5 class="onWhite mt-6">Workout Name</h5>
+                  </v-col>
+                  <v-col cols="6">
+                    <v-text-field
+                        class="mt-4"
+                        solo
+                        rounded
+                        single-line
+                        dark
+                        background-color="#55B8FF"
+                        v-model="newData.name"
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col cols="4" class="text-center">
+                    <h5 class="onWhite mt-5">Description</h5>
+                  </v-col>
+                  <v-col cols="6">
+                    <v-text-field
+                        class="mt-4"
+                        solo
+                        rounded
+                        single-line
+                        dark
+                        background-color="#55B8FF"
+                        v-model="newData.detail"
+                    >{{ routine.detail }}</v-text-field>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col cols="4" class="text-center">
+                    <h5 class="onWhite mt-2">Intensity</h5>
+                  </v-col>
+                  <v-col cols="6">
+                    <v-select
+                        :items="items2"
+                        rounded
+                        single-line
+                        solo
+                        background-color="#55B8FF"
+                        dark
+                        v-model="routine.difficulty"
+                    />
+                  </v-col>
+                </v-row>
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-window-item>
       </v-window>
       <v-row class="mb-16">
         <v-col cols="2" />
         <v-col cols="1">
           <v-btn v-if="step !== 1 " rounded elevation="5" class="pa-7 mb-16 mt-10 next" width="100%" @click="step--">Prev</v-btn>
+          <v-btn v-if="step === 1" rounded elevation="5" class="pa-7 mb-16 mt-10 next" width="100%" @click="deleteRoutine">Delete</v-btn>
         </v-col>
         <v-col cols="6"/>
         <v-col cols="1">
-          <v-btn v-if="step !== 3" rounded elevation="5" class="pa-7 mb-16 mt-10 next" width="100%" @click="step++">Next</v-btn>
-          <v-btn v-if="step === 3" rounded elevation="5" class="pa-7 mb-16 mt-10 next" width="100%" @click="finish">Finish</v-btn>
+          <v-btn v-if="step !== 2" rounded elevation="5" class="pa-7 mb-16 mt-10 next" width="100%" @click="step++">Next</v-btn>
+          <v-btn v-if="step === 2" rounded elevation="5" class="pa-7 mb-16 mt-10 next" width="100%" @click="finish">Finish</v-btn>
         </v-col>
       </v-row>
-      <createExercise @createdExercise="getAllExercises"/>
     </v-main>
     <FooterBar />
   </v-app>
@@ -64,6 +127,7 @@ export default {
 
   data() {
     return {
+      items2: ['rookie', 'beginner', 'intermediate', 'advanced', 'expert'],
       routines: undefined,
       routine: undefined,
       requestedIndex:undefined,
@@ -71,7 +135,37 @@ export default {
       cycles: undefined,
       cycleExercises:[],
       step:0,
-      exercises: undefined
+      exercises: undefined,
+      cyclesCW:[
+        {
+          cycleName: "Warmup",
+          count:0,
+          repetitions: 1,
+          exercises: [
+
+          ],
+        },
+        {
+          cycleName:"Cycle 1",
+          count:0,
+          repetitions: 1,
+          exercises: [],
+        },
+        {
+          cycleName: "Cooldown",
+          count:0,
+          repetitions: 1,
+          exercises: [
+          ],
+        },
+      ],
+    newData: {
+      "name": "",
+        "detail": "",
+        "isPublic": true,
+        "difficulty": "",
+      "metadata": null
+    }
     }
   },
   async created() {
@@ -79,21 +173,11 @@ export default {
     await this.getAllRoutines();
     await this.getAllExercises();
     await this.getRoutine();
-
     await this.getCycles();
-    this.cycles.forEach(element => this.getCycleExercises(element.id));
-      // const data = await RoutineApi.getCycles(this.requestedId);
-      // for (const cycle of data.content) {
-      //   const exerciseObj = await cycleExerciseApi.getCycleExercises(cycle.id);
-      //   cycle.exercises = exerciseObj.content;
-      //   switch (cycle.type){
-      //     case "warmup": this.warmup = cycle; break;
-      //     case "cooldown": this.cooldown = cycle;break;
-      //     case "cycle": this.cycle =cycle;break;
-      //   }}
-      // this.cycles.push(this.warmup);
-      // this.cycles.push(this.cycle);
-      // this.cycles.push(this.cooldown);
+    await this.cycles.forEach(element => this.getCycleExercises(element.id));
+    this.newData.name = this.routine.name;
+    this.newData.detail = this.routine.detail;
+    this.newData.difficulty = this.routine.difficulty;
   },
 
 
@@ -111,11 +195,12 @@ export default {
     }),
 
     async getCycles(){
-      console.log("Ando bien en cycles 1");
 
       const cycles = await this.$getCycles(this.routine.id);
-      console.log("Ando bien en cycles");
-      this.cycles = cycles.content;
+      console.log("esto es cycles")
+      console.log(cycles);
+      this.cycles = cycles.content
+      console.log(this.cycles);
     },
 
     async getCycleExercises(id){
@@ -131,9 +216,13 @@ export default {
         this.routines = routines.content;
         this.controller = null
 
-      console.log("por favor");
 
     },
+
+    async deleteRoutine(){
+      await this.$deleteRoutine(this.routine);
+    },
+
 
     updateStage(index) {
       this.selectedStage = index;
@@ -150,11 +239,19 @@ export default {
         this.routine = await this.$getRoutine(this.routines[this.requestedIndex]);
     },
 
+    async finish(){
+      await this.$modifyRoutine(this.routine, this.newData);
+    },
+
     ...mapActions(useRoutineStore, {
       $getCycles:'getCycles',
       $getRoutine:'get',
       $getCycleExercises:'getCycleExercises',
-      $getAllRoutines: 'getAll'
+      $getAllRoutines: 'getAll',
+      $deleteCycleExercise: 'deleteCycleExercise',
+      $deleteCycle:'deleteCycle',
+      $deleteRoutine:'delete',
+      $modifyRoutine:'modify'
     }),
 
     ...mapActions(useExerciseStore, {
@@ -166,30 +263,6 @@ export default {
       $login: 'login',
       $logout: 'logout',
     }),
-
-    //TODO: hacer que esto haga todo modify de las cosas que ya existen
-    // async finish(){
-    //   const myRoutine = new Routine(this.routine.name, this.routine.detail,this.routine.isPublic, this.routine.difficulty);
-    //   this.routine = await this.$createRoutine(myRoutine);
-    //   const warmup = new Cycle(this.cycles[0].cycleName, this.cycles[0].cycleName, 1, this.cycles[0].repetitions,"warmup");
-    //   const cycle1 = new Cycle(this.cycles[1].cycleName, this.cycles[1].cycleName, 2 , this.cycles[1].repetitions,"cycle");
-    //   const cooldown = new Cycle(this.cycles[2].cycleName, this.cycles[2].cycleName, 3 , this.cycles[2].repetitions,"cooldown");
-    //   const c1=await this.$addCycle(this.routine.id, warmup);
-    //   const c2 =await  this.$addCycle(this.routine.id, cycle1);
-    //   const c3 = await this.$addCycle(this.routine.id, cooldown);
-    //
-    //   for(let i = 0 ; i < this.cycles[0].count ; i++){
-    //
-    //     await this.$addCycleExercise({"order":i+1,"duration":this.cycles[0].exercises[i].repsOrTime,"repetitions":this.cycles[0].exercises[i].repsOrTime},c1.id, this.cycles[0].exercises[i].id);
-    //   }
-    //   for(let i = 0 ; i < this.cycles[1].count ; i++){
-    //
-    //     await this.$addCycleExercise({"order":i+1,"duration":this.cycles[1].exercises[i].repsOrTime,"repetitions":this.cycles[1].exercises[i].repsOrTime},c2.id, this.cycles[1].exercises[i].id);
-    //   }
-    //   for(let i = 0 ; i < this.cycles[2].count ; i++){
-    //     await this.$addCycleExercise({"order":i+1,"duration":this.cycles[2].exercises[i].repsOrTime,"repetitions":this.cycles[2].exercises[i].repsOrTime},c3.id, this.cycles[2].exercises[i].id);
-    //   }
-    // },
 
     kill(index, cycleIndex){
       this.cycles[cycleIndex].exercises.splice(index,1);

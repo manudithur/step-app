@@ -20,8 +20,8 @@ class RoutineApi{
         })
     }
 
-    static async modify(routine){
-        return await Api.put(RoutineApi.getUrl(routine.id),true, routine);
+    static async modify(id, newData){
+        return await Api.put(RoutineApi.getUrl(id),true, newData);
     }
 
     static async delete(id){
@@ -42,6 +42,10 @@ class RoutineApi{
 
     static async addCycle(routineId,cycle) {
         return await Api.post(RoutineApi.getUrl(`${routineId}/cycles`), true, cycle);
+    }
+
+    static async deleteCycle(routineId, cycleId){
+        return await Api.delete(RoutineApi.getUrl(`${routineId}/cycles/${cycleId}`, true))
     }
 }
 

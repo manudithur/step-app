@@ -18,6 +18,10 @@ class CycleExerciseApi{
         return await Api.get(CycleExerciseApi.getUrl(`${id}/exercises`))
     }
 
+    static async deleteCycleExercise(cycleId, exerciseId){
+        return await Api.delete(CycleExerciseApi.getUrl(`${cycleId}/exercises/${exerciseId}`), true)
+    }
+
 }
 
 class CycleExercise{
